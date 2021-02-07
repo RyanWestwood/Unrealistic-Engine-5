@@ -74,28 +74,28 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glm;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\SDL2-2.0.14\lib\x86;$(SolutionDir)lib\glew-2.2.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glm;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\SDL2-2.0.14\lib\x86;$(SolutionDir)lib\glew-2.2.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glm;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\SDL2-2.0.14\lib\x64;$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)lib\glew-2.2.0\include;$(SolutionDir)lib\glm;$(SolutionDir)lib\SDL2-2.0.14\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\SDL2-2.0.14\lib\x64;$(SolutionDir)lib\glew-2.2.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -161,9 +161,12 @@
   <ItemGroup>
     <ClCompile Include="src\GameEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\TriangleRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GameEngine.h" />
+    <ClInclude Include="src\TriangleRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@
 #include "GameEngine.h"
 #include <iostream>
 #include <string>
+#include <glm/glm.hpp>
 
 using namespace Divide;
 
@@ -11,7 +12,7 @@ int main(int argv, char* argc[]) {
 	GameEngine gameEngine;
 
 	if (!gameEngine.Init(true)) {
-		DisplayInfoMessages("Couldn't SDL. Check console output for more details!");
+		Divide::DisplayInfoMessages("Couldn't load SDL! Check console output for more details.");
 	}
 
 	uint32_t last_time = SDL_GetTicks();
@@ -27,6 +28,7 @@ int main(int argv, char* argc[]) {
 		current_time = SDL_GetTicks();
 
 		if (current_time - last_time > 1000) {
+
 			std::string msg;
 			msg.append("FPS: " + std::to_string(frame_count));
 
@@ -35,7 +37,7 @@ int main(int argv, char* argc[]) {
 			last_time = current_time;
 		}
 	}
-	gameEngine.Clean();
+	gameEngine.Free();
 
 	return 0;
 }

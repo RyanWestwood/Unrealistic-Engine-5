@@ -3,6 +3,9 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
+#include "Camera.h"
+#include "TriangleRenderer.h"
+
 namespace Divide {
 
 	class GameEngine {
@@ -18,13 +21,15 @@ namespace Divide {
 		void Update();
 		void Draw();
 
-		void Clean();
+		void Free();
 
 		void SetWindowTitle(const char* title);
 
 	private:
 		SDL_Window* m_Window;
 		SDL_GLContext m_Context;
+		TriangleRenderer* m_Triangle;
+		Camera* m_Camera;
 	};
 
 	void DisplayInfoMessages(const char*);
