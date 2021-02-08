@@ -1,10 +1,9 @@
 #include "GameEngine.h"
 #include <iostream>
 
-//	TODO: TRY THIS!
-//#define SCREEN_WIDTH 1024
-//#define SCREEN_HEIGHT 576
-//#define ASPECT_RATIO SCREEN_WIDTH / SCREEN_HEIGHT
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 576
+#define ASPECT_RATIO SCREEN_WIDTH / SCREEN_HEIGHT
 
 Divide::GameEngine::GameEngine()
 {
@@ -25,7 +24,7 @@ bool Divide::GameEngine::Init(bool vsync)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	m_Window = SDL_CreateWindow("Divide", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 576, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	m_Window = SDL_CreateWindow("Divide", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (m_Window == nullptr) {
 		std::cerr << "Unable to create window! SDL Error: " << SDL_GetError() << "\n";
 		return false;
@@ -52,7 +51,7 @@ bool Divide::GameEngine::Init(bool vsync)
 		glm::vec3(0.0f, 0.0f, 5.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		45.0f, 1024 / 576, 0.1f, 1000.0f
+		100.0f, ASPECT_RATIO, 0.1f, 1000.0f
 	);
 
 	m_Triangle = new TriangleRenderer();
@@ -78,6 +77,7 @@ void Divide::GameEngine::Input()
 
 void Divide::GameEngine::Update()
 {
+	m_Triangle->SetRotation({ 0.0f, m_Triangle->GetRotation().y + 1, 0.0f });
 }
 
 void Divide::GameEngine::Draw()
