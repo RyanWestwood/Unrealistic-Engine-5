@@ -1,7 +1,12 @@
-﻿  main.cpp
+﻿  GameEngine.cpp
+  main.cpp
+  Model.cpp
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Model.cpp(21,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Model.cpp(23,34): warning C4018: '<': signed/unsigned mismatch
+  ModelRenderer.cpp
   Generating code
-  0 of 13 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  257 of 262 functions (98.1%) were compiled, the rest were copied from previous compilation.
+    239 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Game Engine.vcxproj -> C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\bin\Win32\Release\Game Engine.exe

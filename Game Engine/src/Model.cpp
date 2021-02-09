@@ -3,6 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <vector>
+#include <iostream>
 
 namespace Divide {
 
@@ -25,10 +26,10 @@ namespace Divide {
 				for (int vertexIdx = 0; vertexIdx < 3; vertexIdx++)
 				{
 					const aiVector3D* pos = &mesh->mVertices[face.mIndices[vertexIdx]];
-					loadedVertices.emplace_back(Vertex(pos->x, pos->y, pos->z, 1.0f, 1.0f, 1.0f, 1.0f));
+					loadedVertices.push_back(Vertex(pos->x, pos->y, pos->z, 1.0f, 1.0f, 1.0f, 1.0f));
 				}
 			}
-		}
+		} 
 
 		m_NumVertices = loadedVertices.size();
 		m_Vertices = new Vertex[m_NumVertices];
