@@ -54,8 +54,14 @@ bool Divide::GameEngine::Init(bool vsync)
 		100.0f, ASPECT_RATIO, 0.1f, 1000.0f
 	);
 
-	m_Triangle = new TriangleRenderer();
-	m_Triangle->Init();
+	m_Model = new Model();
+	bool result = m_Model->LoadFromFile("resources/models/monkey.obj");
+	if (!result) {
+		std::cerr << "Failed to load model!\n";
+	}
+
+	m_ModelRenderer = new ModelRenderer(m_Model);
+	m_ModelRenderer->Init();
 
 	return true;
 }
@@ -77,7 +83,7 @@ void Divide::GameEngine::Input()
 
 void Divide::GameEngine::Update()
 {
-	m_Triangle->SetRotation({ 0.0f, m_Triangle->GetRotation().y + 1, 0.0f });
+	m_ModelRenderer->SetRotation({ 0.0f, m_ModelRenderer->GetRotation().y + 1, 0.0f });
 }
 
 void Divide::GameEngine::Draw()
@@ -85,15 +91,15 @@ void Divide::GameEngine::Draw()
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	m_Triangle->Draw(m_Camera);
+	m_ModelRenderer->Draw(m_Camera);
 
 	SDL_GL_SwapWindow(m_Window);
 }
 
 void Divide::GameEngine::Free()
 {
-	m_Triangle->Free();
-	delete m_Triangle;
+	m_ModelRenderer->Free();
+	delete m_Model;
 	delete m_Camera;
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;

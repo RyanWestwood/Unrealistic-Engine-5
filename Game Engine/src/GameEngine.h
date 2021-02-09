@@ -4,7 +4,7 @@
 #include <SDL_opengl.h>
 
 #include "Camera.h"
-#include "TriangleRenderer.h"
+#include "ModelRenderer.h"
 
 namespace Divide {
 
@@ -28,8 +28,9 @@ namespace Divide {
 	private:
 		SDL_Window* m_Window;
 		SDL_GLContext m_Context;
-		TriangleRenderer* m_Triangle;
 		Camera* m_Camera;
+		ModelRenderer* m_ModelRenderer;
+		Model* m_Model;
 	};
 
 	void DisplayInfoMessages(const char*);
