@@ -28,12 +28,6 @@ namespace Divide {
 		}
 	}
 
-	std::vector<Vertex> vertexData = {
-		Vertex{-1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f },
-		Vertex{ 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f },
-		Vertex{ 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }
-	};
-
 	Divide::ModelRenderer::ModelRenderer(Model* model)
 	{
 		m_Position = { 0.0f, 0.0f, 0.0f };
@@ -49,20 +43,36 @@ namespace Divide {
 	void Divide::ModelRenderer::Init()
 	{
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		/*	const GLchar* vertexShaderCode[] = {
+			"#version 140\n"
+			"in vec3 vertexPos3D;\n"
+			"in vec4 vColour;\n"
+			"out vec4 fColour;\n"
+			"uniform mat4 transform;\n"
+			"uniform mat4 view;\n"
+			"uniform mat4 projection;\n"
+			"void main() {\n"
+				"vec4 v = vec4(vertexPos3D.xyz, 1);\n"
+				"v = projection * view * transform * v;\n"
+				"gl_Position = v;\n"
+				"fColour = vColour;\n"
+			"}\n"
+			};*/
+
 		const GLchar* vertexShaderCode[] = {
-		"#version 140\n"
-		"in vec3 vertexPos3D;\n"
-		"in vec4 vColour;\n"
-		"out vec4 fColour;\n"
-		"uniform mat4 transform;\n"
-		"uniform mat4 view;\n"
-		"uniform mat4 projection;\n"
-		"void main() {\n"
-			"vec4 v = vec4(vertexPos3D.xyz, 1);\n"
-			"v = projection * view * transform * v;\n"
-			"gl_Position = v;\n"
-			"fColour = vColour;\n"
-		"}\n"
+			"#version 140\n"
+			"in vec3 vertexPos3D;\n"
+			"in vec2 vUV;\n"
+			"out vec2 uv;\n"
+			"uniform mat4 transform;\n"
+			"uniform mat4 view;\n"
+			"uniform mat4 projection;\n"
+			"void main() {\n"
+				"vec4 v = vec4(vertexPos3D.xyz, 1);\n"
+				"v = projection * view * transform * v;\n"
+				"gl_Position = v;\n"
+				"uv = vUV;\n"
+			"}\n"
 		};
 
 		glShaderSource(vertexShader, 1, vertexShaderCode, NULL);
@@ -77,13 +87,23 @@ namespace Divide {
 		}
 
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		//const GLchar* fragmentShaderCode[] = {
+		//	"#version 140\n"
+		//	"in vec4 fColour;\n"
+		//	"out vec4 fragmentColour;\n"
+		//	"void main()"
+		//	"{"
+		//		"fragmentColour = fColour;"
+		//	"}"
+		//};
 		const GLchar* fragmentShaderCode[] = {
 			"#version 140\n"
-			"in vec4 fColour;\n"
+			"in vec2 uv;\n"
+			"uniform sampler2D sampler;\n"
 			"out vec4 fragmentColour;\n"
 			"void main()"
 			"{"
-				"fragmentColour = fColour;"
+				"fragmentColour = texture(sampler, uv).rgba;"
 			"}"
 		};
 
@@ -99,34 +119,35 @@ namespace Divide {
 		}
 
 
-		m_ProgramId = glCreateProgram();
+		m_ProgramID = glCreateProgram();
 
-		glAttachShader(m_ProgramId, vertexShader);
-		glAttachShader(m_ProgramId, fragmentShader);
+		glAttachShader(m_ProgramID, vertexShader);
+		glAttachShader(m_ProgramID, fragmentShader);
 
-		glLinkProgram(m_ProgramId);
+		glLinkProgram(m_ProgramID);
 
 		GLint programLinked = GL_FALSE;
-		glGetProgramiv(m_ProgramId, GL_LINK_STATUS, &programLinked);
+		glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &programLinked);
 		if (programLinked != GL_TRUE) {
 			std::cerr << "Failed to link program!\n";
-			DisplayProgramCompilationError(m_ProgramId);
+			DisplayProgramCompilationError(m_ProgramID);
 			return;
 		}
 
-		m_VertexPos3DLocation = glGetAttribLocation(m_ProgramId, "vertexPos3D");
+		m_VertexPos3DLocation = glGetAttribLocation(m_ProgramID, "vertexPos3D");
 		if (m_VertexPos3DLocation == -1) {
 			std::cerr << "Problem getting vertexPos3D\n";
 		}
 
-		m_VertexFragmentColourLocation = glGetAttribLocation(m_ProgramId, "vColour");
-		if (m_VertexFragmentColourLocation == -1) {
-			std::cerr << "Problem getting vColour\n";
+		m_VertexUVLocation = glGetAttribLocation(m_ProgramID, "vUV");
+		if (m_VertexUVLocation == -1) {
+			std::cerr << "Problem getting vUV\n";
 		}
 
-		m_TransformUniformID = glGetUniformLocation(m_ProgramId, "transform");
-		m_ViewUniformID = glGetUniformLocation(m_ProgramId, "view");
-		m_ProjectionUniformID = glGetUniformLocation(m_ProgramId, "projection");
+		m_TransformUniformID = glGetUniformLocation(m_ProgramID, "transform");
+		m_ViewUniformID = glGetUniformLocation(m_ProgramID, "view");
+		m_ProjectionUniformID = glGetUniformLocation(m_ProgramID, "projection");
+		m_SamplerID = glGetUniformLocation(m_ProgramID, "sampler");
 
 		glGenBuffers(1, &m_VboModel);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboModel);
@@ -150,7 +171,7 @@ namespace Divide {
 		glm::mat4 viewMatrix = camera->GetViewMatrix();
 		glm::mat4 projectionMatrix = camera->GetProjectionMatrix();
 
-		glUseProgram(m_ProgramId);
+		glUseProgram(m_ProgramID);
 
 		glUniformMatrix4fv(m_TransformUniformID, 1, GL_FALSE, glm::value_ptr(transformationMatrix));
 		glUniformMatrix4fv(m_ViewUniformID, 1, GL_FALSE, glm::value_ptr(viewMatrix));
@@ -159,22 +180,26 @@ namespace Divide {
 		glVertexAttribPointer(m_VertexPos3DLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x));
 		glEnableVertexAttribArray(m_VertexPos3DLocation);
 
-		glVertexAttribPointer(m_VertexFragmentColourLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, r));
-		glEnableVertexAttribArray(m_VertexFragmentColourLocation);
+		glVertexAttribPointer(m_VertexUVLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u));
+		glEnableVertexAttribArray(m_VertexUVLocation);
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboModel);
+
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(m_SamplerID, 0);
+		glBindTexture(GL_TEXTURE_2D, m_Texture->GetTextureName());
 
 		glDrawArrays(GL_TRIANGLES, 0, m_Model->GetNumVertices());
 
 		glDisableVertexAttribArray(m_VertexPos3DLocation);
-		glDisableVertexAttribArray(m_VertexFragmentColourLocation);
+		glDisableVertexAttribArray(m_VertexUVLocation);
 
 		glUseProgram(0);
 	}
 
 	void Divide::ModelRenderer::Free()
 	{
-		glDeleteProgram(m_ProgramId);
+		glDeleteProgram(m_ProgramID);
 		glDeleteBuffers(1, &m_VboModel);
 	}
 }

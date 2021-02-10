@@ -5,6 +5,7 @@
 
 #include "Camera.h"
 #include "ModelRenderer.h"
+#include "Texture.h"
 
 namespace Divide {
 
@@ -31,6 +32,8 @@ namespace Divide {
 		Camera* m_Camera;
 		ModelRenderer* m_ModelRenderer;
 		Model* m_Model;
+		Texture* m_Texture;
+
 	};
 
 	void DisplayInfoMessages(const char*);

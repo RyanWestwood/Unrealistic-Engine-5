@@ -26,7 +26,8 @@ namespace Divide {
 				for (int vertexIdx = 0; vertexIdx < 3; vertexIdx++)
 				{
 					const aiVector3D* pos = &mesh->mVertices[face.mIndices[vertexIdx]];
-					loadedVertices.push_back(Vertex(pos->x, pos->y, pos->z, 1.0f, 1.0f, 1.0f, 1.0f));
+					const aiVector3D uv = mesh->mTextureCoords[0][face.mIndices[vertexIdx]];
+					loadedVertices.push_back(Vertex(pos->x, pos->y, pos->z, uv.x, uv.y));
 				}
 			}
 		} 

@@ -1,11 +1,11 @@
 #pragma once
 namespace Divide {
 	struct Vertex {
-		Vertex(float x, float y, float z, float r, float g, float b, float a) : x(x), y(y), z(z), r(r), g(g), b(b), a(a) {}
-		Vertex() { x = y = z = 0.0f; r = g = b = a = 0.0f; }
+		Vertex(float x, float y, float z, float u, float v) : x(x), y(y), z(z), u(u), v(v) {}
+		Vertex() { x = y = z = 0.0f; u = v = 0.0f; }
 
 		float x, y, z;
-		float r, g, b, a;
+		float u, v;
 	};
 
 	class Model {

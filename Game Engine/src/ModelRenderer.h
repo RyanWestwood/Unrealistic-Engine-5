@@ -4,6 +4,7 @@
 #include <SDL_opengl.h>
 #include "Camera.h"
 #include "Model.h"
+#include "Texture.h"
 
 namespace Divide {
 
@@ -26,13 +27,13 @@ namespace Divide {
 		void SetPosition(glm::vec3 position) { m_Position = position; }
 		void SetRotation(glm::vec3 rotation) { m_Rotation = rotation; }
 		void SetScale(glm::vec3 scale) { m_Scale = scale; }
-
+		void SetMaterial(Texture* texture) { m_Texture = texture; }
 
 	private:
-		GLuint m_ProgramId;
+		GLuint m_ProgramID;
 		GLuint m_VboModel;
 		GLint m_VertexPos3DLocation;
-		GLint m_VertexFragmentColourLocation;
+		GLint m_VertexUVLocation;
 
 		glm::vec3 m_Position;
 		glm::vec3 m_Rotation;
@@ -41,7 +42,9 @@ namespace Divide {
 		GLuint m_TransformUniformID;
 		GLuint m_ViewUniformID;
 		GLuint m_ProjectionUniformID;
+		GLuint m_SamplerID;
 
 		Model* m_Model;
+		Texture* m_Texture;
 	};
 }

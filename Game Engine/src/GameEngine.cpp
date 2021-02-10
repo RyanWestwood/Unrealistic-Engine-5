@@ -51,17 +51,21 @@ bool Divide::GameEngine::Init(bool vsync)
 		glm::vec3(0.0f, 0.0f, 5.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		100.0f, ASPECT_RATIO, 0.1f, 1000.0f
+		45.0f, ASPECT_RATIO, 0.1f, 1000.0f
 	);
 
 	m_Model = new Model();
-	bool result = m_Model->LoadFromFile("resources/models/monkey.obj");
+	bool result = m_Model->LoadFromFile("resources/models/frigate.obj");
 	if (!result) {
 		std::cerr << "Failed to load model!\n";
 	}
 
+	m_Texture = new Texture("resources/models/frigate.jpg");
+
 	m_ModelRenderer = new ModelRenderer(m_Model);
 	m_ModelRenderer->Init();
+	m_ModelRenderer->SetPosition({ 0.0f, 0.0f, -40.0f });
+	m_ModelRenderer->SetMaterial(m_Texture);
 
 	return true;
 }
@@ -89,7 +93,8 @@ void Divide::GameEngine::Update()
 void Divide::GameEngine::Draw()
 {
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_ModelRenderer->Draw(m_Camera);
 
