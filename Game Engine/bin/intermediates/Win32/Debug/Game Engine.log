@@ -1,9 +1,6 @@
 ﻿  GameEngine.cpp
-  main.cpp
-  Model.cpp
-C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Model.cpp(21,33): warning C4018: '<': signed/unsigned mismatch
-C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Model.cpp(23,34): warning C4018: '<': signed/unsigned mismatch
-  ModelRenderer.cpp
-  Texture.cpp
-  Generating Code...
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(136,33): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(137,33): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(140,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(143,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
   Game Engine.vcxproj -> C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\bin\Win32\Debug\Game Engine.exe

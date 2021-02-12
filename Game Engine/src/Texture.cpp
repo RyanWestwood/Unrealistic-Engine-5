@@ -1,9 +1,9 @@
 #include "Texture.h"
 #include <iostream>
 
-namespace Divide {
+namespace UE {
 
-	void Divide::Texture::LoadTexture(std::string filename)
+	void UE::Texture::LoadTexture(std::string filename)
 	{
 		SDL_Surface* surfaceImage = IMG_Load(filename.c_str());
 		if (surfaceImage == nullptr) {

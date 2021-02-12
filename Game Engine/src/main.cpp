@@ -5,21 +5,21 @@
 #include <string>
 #include <glm/glm.hpp>
 
-using namespace Divide;
+using namespace UE;
 
 int main(int argv, char* argc[]) {
 
 	GameEngine gameEngine;
 
 	if (!gameEngine.Init(true)) {
-		Divide::DisplayInfoMessages("Couldn't load SDL! Check console output for more details.");
+		UE::DisplayInfoMessages("Couldn't load SDL! Check console output for more details.");
 	}
 
 	uint32_t last_time = SDL_GetTicks();
 	uint32_t current_time = 0;
 	uint16_t frame_count = 0;
 
-	while (gameEngine.isRunning()) {
+	while (gameEngine.IsRunning()) {
 		gameEngine.Input();
 		gameEngine.Update();
 		gameEngine.Draw();

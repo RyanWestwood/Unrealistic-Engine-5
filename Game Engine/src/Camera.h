@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Divide {
+namespace UE {
 
 	class Camera {
 	public:
@@ -24,6 +24,8 @@ namespace Divide {
 			m_FarClippingPlane = farClippingPane;
 
 			UpdateCameraMatrices();
+
+			SDL_GetMouseState(&m_OldMouseX, &m_OldMouseY);
 		};
 
 		~Camera(){}
@@ -117,11 +119,36 @@ namespace Divide {
 			return m_ProjectionMatrix;
 		}
 
-	private:
+		//	Set Pitch and Yaw
+		float GetPitch() { return m_Pitch; }
+		float GetYaw() { return m_Yaw; }
+
+		void SetPitch(float pitch) {
+			m_Pitch = pitch;
+			if (pitch > 70.0f) m_Pitch = 70.0f;
+			if (pitch < -70.0f) m_Pitch = -70.0f;
+		}
+		void SetYaw(float yaw) {
+			m_Yaw = yaw;
+		}
+
+		//	Set old mouse vars
+		float GetOldMouseX() { return m_OldMouseX; }
+		float GetOldMouseY() { return m_OldMouseY; }
+
+		void SetOldMouseX(float oldMouseX) {
+			m_OldMouseX = oldMouseX;
+		}
+		void SetOldMouseY(float oldMouseY) {
+			m_OldMouseY = oldMouseY;
+		}
+
 		void UpdateCameraMatrices() {
-			m_ViewMatrix = glm::lookAt(m_Position, m_Target, m_UpDirection);
+			m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Target, m_UpDirection);
 			m_ProjectionMatrix = glm::perspective(glm::radians(m_FieldOfView), m_AspectRatio, m_NearClippingPlane, m_FarClippingPlane);
 		}
+
+	private:
 
 		glm::vec3 m_Position;
 		glm::vec3 m_Target;
@@ -131,6 +158,11 @@ namespace Divide {
 		float m_AspectRatio;
 		float m_NearClippingPlane;
 		float m_FarClippingPlane;
+
+		float m_Pitch = 0.0f;
+		float m_Yaw = -90.0f;
+
+		int m_OldMouseX, m_OldMouseY;
 
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ProjectionMatrix;

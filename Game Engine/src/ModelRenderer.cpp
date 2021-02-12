@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-namespace Divide {
+namespace UE {
 
 	void DisplayShaderCompilationError(GLuint shaderID) {
 		GLint msgLen = 0;
@@ -28,7 +28,7 @@ namespace Divide {
 		}
 	}
 
-	Divide::ModelRenderer::ModelRenderer(Model* model)
+	UE::ModelRenderer::ModelRenderer(Model* model)
 	{
 		m_Position = { 0.0f, 0.0f, 0.0f };
 		m_Rotation = { 0.0f, 0.0f, 0.0f };
@@ -36,11 +36,11 @@ namespace Divide {
 		m_Model = model;
 	}
 
-	Divide::ModelRenderer::~ModelRenderer()
+	UE::ModelRenderer::~ModelRenderer()
 	{
 	}
 
-	void Divide::ModelRenderer::Init()
+	void UE::ModelRenderer::Init()
 	{
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		/*	const GLchar* vertexShaderCode[] = {
@@ -155,12 +155,14 @@ namespace Divide {
 		glBufferData(GL_ARRAY_BUFFER, m_Model->GetNumVertices() * sizeof(Vertex), m_Model->GetVertices(), GL_STATIC_DRAW);
 	}
 
-	void Divide::ModelRenderer::Update()
+	void UE::ModelRenderer::Update()
 	{
 	}
 
-	void Divide::ModelRenderer::Draw(Camera* camera)
+	void UE::ModelRenderer::Draw(Camera* camera)
 	{
+		glEnable(GL_CULL_FACE);
+
 		glm::mat4 transformationMatrix = glm::mat4(1.0f);
 		transformationMatrix = glm::translate(transformationMatrix, glm::vec3(m_Position.x, m_Position.y, m_Position.z));
 		transformationMatrix = glm::rotate(transformationMatrix, glm::radians(m_Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -195,9 +197,11 @@ namespace Divide {
 		glDisableVertexAttribArray(m_VertexUVLocation);
 
 		glUseProgram(0);
+
+		glDisable(GL_CULL_FACE);
 	}
 
-	void Divide::ModelRenderer::Free()
+	void UE::ModelRenderer::Free()
 	{
 		glDeleteProgram(m_ProgramID);
 		glDeleteBuffers(1, &m_VboModel);

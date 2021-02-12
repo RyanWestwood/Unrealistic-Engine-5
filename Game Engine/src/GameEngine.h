@@ -7,7 +7,7 @@
 #include "ModelRenderer.h"
 #include "Texture.h"
 
-namespace Divide {
+namespace UE {
 
 	class GameEngine {
 	public:
@@ -16,7 +16,7 @@ namespace Divide {
 		virtual ~GameEngine();
 
 		bool Init(bool);
-		bool isRunning();
+		bool IsRunning();
 
 		void Input();
 		void Update();
@@ -33,7 +33,6 @@ namespace Divide {
 		ModelRenderer* m_ModelRenderer;
 		Model* m_Model;
 		Texture* m_Texture;
-
 	};
 
 	void DisplayInfoMessages(const char*);

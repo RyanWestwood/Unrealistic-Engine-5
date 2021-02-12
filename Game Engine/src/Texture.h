@@ -4,7 +4,7 @@
 #include <SDL_image.h>
 #include <string>
 
-namespace Divide {
+namespace UE {
 	class Texture {
 	public:
 		Texture(std::string filename) {

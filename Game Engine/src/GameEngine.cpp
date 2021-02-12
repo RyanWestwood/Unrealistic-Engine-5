@@ -5,15 +5,15 @@
 #define SCREEN_HEIGHT 576
 #define ASPECT_RATIO SCREEN_WIDTH / SCREEN_HEIGHT
 
-Divide::GameEngine::GameEngine()
+UE::GameEngine::GameEngine()
 {
 }
 
-Divide::GameEngine::~GameEngine()
+UE::GameEngine::~GameEngine()
 {
 }
 
-bool Divide::GameEngine::Init(bool vsync)
+bool UE::GameEngine::Init(bool vsync)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cerr << "Unable to init SDL sub-systems! SDL Error: " << SDL_GetError() << "\n";
@@ -70,7 +70,7 @@ bool Divide::GameEngine::Init(bool vsync)
 	return true;
 }
 
-bool Divide::GameEngine::isRunning()
+bool UE::GameEngine::IsRunning()
 {
 	SDL_PumpEvents();
 
@@ -81,16 +81,104 @@ bool Divide::GameEngine::isRunning()
 	return true;
 }
 
-void Divide::GameEngine::Input()
+void UE::GameEngine::Input()
 {
+	const float c_CameraSpeed = 5.0f;
+	const float c_MouseSensitivity = 0.1f;
+
+	int mouseX, mouseY;
+	SDL_GetMouseState(&mouseX, &mouseY);
+
+	float diffX = mouseX - m_Camera->GetOldMouseX();
+	float diffY = m_Camera->GetOldMouseY() - mouseY;
+
+	m_Camera->SetYaw((m_Camera->GetYaw() + diffX) * c_MouseSensitivity);
+	m_Camera->SetPitch((m_Camera->GetPitch() + diffY) * c_MouseSensitivity);
+
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(m_Camera->GetYaw())) * cos(glm::radians(m_Camera->GetPitch()));
+	direction.y = sin(glm::radians(m_Camera->GetPitch()));
+	direction.z = sin(glm::radians(m_Camera->GetYaw())) * cos(glm::radians(m_Camera->GetPitch()));
+	m_Camera->SetTarget(glm::normalize(direction));
+
+	bool keyStates[4];
+	memset(keyStates, false, sizeof(keyStates));
+
+	enum {
+		UP = 0,
+		DOWN,
+		LEFT,
+		RIGHT
+	};
+
+	SDL_Event e;
+	if (SDL_PollEvent(&e)) {
+		if (e.type == SDL_KEYDOWN) {
+			switch (e.key.keysym.scancode) {
+			case SDL_SCANCODE_W:
+			case SDL_SCANCODE_UP:
+				keyStates[UP] = true;
+				break;
+			case SDL_SCANCODE_S:
+			case SDL_SCANCODE_DOWN:
+				keyStates[DOWN] = true;
+				break;
+			case SDL_SCANCODE_A:
+			case SDL_SCANCODE_LEFT:
+				keyStates[LEFT] = true;
+				break;
+			case SDL_SCANCODE_D:
+			case SDL_SCANCODE_RIGHT:
+				keyStates[RIGHT] = true;
+				break;
+			}
+		}
+		if (e.type == SDL_KEYUP) {
+			switch (e.key.keysym.scancode) {
+			case SDL_SCANCODE_W:
+			case SDL_SCANCODE_UP:
+				keyStates[UP] = false;
+				break;
+			case SDL_SCANCODE_S:
+			case SDL_SCANCODE_DOWN:
+				keyStates[DOWN] = false;
+				break;
+			case SDL_SCANCODE_A:
+			case SDL_SCANCODE_LEFT:
+				keyStates[LEFT] = false;
+				break;
+			case SDL_SCANCODE_D:
+			case SDL_SCANCODE_RIGHT:
+				keyStates[RIGHT] = false;
+				break;
+			}
+		}
+	}
+
+	if (keyStates[UP]) {
+		m_Camera->SetPosition(m_Camera->GetPosition() + m_Camera->GetTarget() * c_CameraSpeed);
+	}
+	if (keyStates[DOWN]) {
+		m_Camera->SetPosition(m_Camera->GetPosition() - m_Camera->GetTarget() * c_CameraSpeed);
+	}
+	if (keyStates[LEFT]) {
+		m_Camera->SetPosition(m_Camera->GetPosition() - glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
+	}
+	if (keyStates[RIGHT]) {
+		m_Camera->SetPosition(m_Camera->GetPosition() + glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
+	}
+
+	m_Camera->UpdateCameraMatrices();
+	m_Camera->SetOldMouseX(SCREEN_WIDTH / 2);
+	m_Camera->SetOldMouseY(SCREEN_HEIGHT / 2);
 }
 
-void Divide::GameEngine::Update()
+void UE::GameEngine::Update()
 {
 	m_ModelRenderer->SetRotation({ 0.0f, m_ModelRenderer->GetRotation().y + 1, 0.0f });
 }
 
-void Divide::GameEngine::Draw()
+void UE::GameEngine::Draw()
 {
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -101,7 +189,7 @@ void Divide::GameEngine::Draw()
 	SDL_GL_SwapWindow(m_Window);
 }
 
-void Divide::GameEngine::Free()
+void UE::GameEngine::Free()
 {
 	m_ModelRenderer->Free();
 	delete m_Model;
@@ -111,13 +199,13 @@ void Divide::GameEngine::Free()
 	SDL_Quit();
 }
 
-void Divide::GameEngine::SetWindowTitle(const char* title)
+void UE::GameEngine::SetWindowTitle(const char* title)
 {
 	SDL_SetWindowTitle(m_Window, title);
 }
 
-void Divide::DisplayInfoMessages(const char* msg)
+void UE::DisplayInfoMessages(const char* msg)
 {
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Basic Game Engine", msg, nullptr);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Divide Engine", msg, nullptr);
 }
 

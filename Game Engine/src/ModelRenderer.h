@@ -6,7 +6,7 @@
 #include "Model.h"
 #include "Texture.h"
 
-namespace Divide {
+namespace UE {
 
 	class ModelRenderer {
 	public:
