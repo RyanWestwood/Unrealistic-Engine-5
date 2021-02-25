@@ -24,7 +24,7 @@ bool UE::GameEngine::Init(bool vsync)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	m_Window = SDL_CreateWindow("Divide", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	m_Window = SDL_CreateWindow("Unrealistic Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (m_Window == nullptr) {
 		std::cerr << "Unable to create window! SDL Error: " << SDL_GetError() << "\n";
 		return false;
@@ -47,25 +47,34 @@ bool UE::GameEngine::Init(bool vsync)
 		return false;
 	}
 
+	dist = glm::vec3(0.0f, 0.0f, -100.0f);
+
 	m_Camera = new Camera(
 		glm::vec3(0.0f, 0.0f, 5.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f) + dist,
 		glm::vec3(0.0f, 1.0f, 0.0f),
 		45.0f, ASPECT_RATIO, 0.1f, 1000.0f
 	);
 
 	m_Model = new Model();
-	bool result = m_Model->LoadFromFile("resources/models/frigate.obj");
+	bool result = m_Model->LoadFromFile("resources/models/colosseum.obj");
 	if (!result) {
 		std::cerr << "Failed to load model!\n";
 	}
 
-	m_Texture = new Texture("resources/models/frigate.jpg");
+	m_Texture = new Texture("resources/models/colosseum.jpg");
 
 	m_ModelRenderer = new ModelRenderer(m_Model);
 	m_ModelRenderer->Init();
-	m_ModelRenderer->SetPosition({ 0.0f, 0.0f, -40.0f });
+	m_ModelRenderer->SetRotation({ -90.0f, 0.0f, 0.0f });
+	m_ModelRenderer->SetScale({ 3,3,3 });
 	m_ModelRenderer->SetMaterial(m_Texture);
+
+	m_Skybox = new SkyboxRenderer( "resources/skybox/front.png", "resources/skybox/back.png",
+								   "resources/skybox/left.png",  "resources/skybox/right.png",
+								   "resources/skybox/top.png",   "resources/skybox/bottom.png" );
+							
+
 
 	return true;
 }
@@ -83,7 +92,7 @@ bool UE::GameEngine::IsRunning()
 
 void UE::GameEngine::Input()
 {
-	const float c_CameraSpeed = 5.0f;
+	const float c_CameraSpeed = 1.0f;
 	const float c_MouseSensitivity = 0.1f;
 
 	int mouseX, mouseY;
@@ -175,7 +184,20 @@ void UE::GameEngine::Input()
 
 void UE::GameEngine::Update()
 {
-	m_ModelRenderer->SetRotation({ 0.0f, m_ModelRenderer->GetRotation().y + 1, 0.0f });
+	//m_ModelRenderer->SetRotation({ 0.0f, m_ModelRenderer->GetRotation().y + 1, 0.0f });
+
+	//glm::mat4 cam_rot = glm::mat4(1.0f);
+
+	//cam_rot = glm::rotate(cam_rot, glm::radians(0.125f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	//glm::vec4 temp = glm::vec4(dist, 0.0f);
+
+	//temp = temp * cam_rot;
+
+	//dist = glm::vec3(temp.x, temp.y, temp.z);
+
+	//m_Camera->SetTarget(dist);
+
 }
 
 void UE::GameEngine::Draw()
@@ -185,6 +207,7 @@ void UE::GameEngine::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_ModelRenderer->Draw(m_Camera);
+	m_Skybox->Draw(m_Camera);
 
 	SDL_GL_SwapWindow(m_Window);
 }
@@ -194,6 +217,7 @@ void UE::GameEngine::Free()
 	m_ModelRenderer->Free();
 	delete m_Model;
 	delete m_Camera;
+	delete m_Skybox;
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
 	SDL_Quit();
@@ -206,6 +230,6 @@ void UE::GameEngine::SetWindowTitle(const char* title)
 
 void UE::DisplayInfoMessages(const char* msg)
 {
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Divide Engine", msg, nullptr);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Unrealistic Engine", msg, nullptr);
 }
 

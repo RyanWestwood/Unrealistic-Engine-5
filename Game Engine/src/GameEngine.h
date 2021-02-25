@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "ModelRenderer.h"
 #include "Texture.h"
+#include "SkyboxRenderer.h"
 
 namespace UE {
 
@@ -33,6 +34,9 @@ namespace UE {
 		ModelRenderer* m_ModelRenderer;
 		Model* m_Model;
 		Texture* m_Texture;
+		SkyboxRenderer* m_Skybox;
+
+		glm::vec3 dist;
 	};
 
 	void DisplayInfoMessages(const char*);

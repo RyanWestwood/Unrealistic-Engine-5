@@ -163,6 +163,8 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelRenderer.cpp" />
+    <ClCompile Include="src\ShaderUtils.cpp" />
+    <ClCompile Include="src\SkyboxRenderer.cpp" />
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +172,8 @@
     <ClInclude Include="src\GameEngine.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\ModelRenderer.h" />
+    <ClInclude Include="src\ShaderUtils.h" />
+    <ClInclude Include="src\SkyboxRenderer.h" />
     <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
