@@ -13,7 +13,7 @@ namespace UE {
 		CubeVertex(float x, float y, float z) : x(x), y(y), z(z) {}
 	};
 
-	const float SIDE = 1.0f;
+	const float SIDE = 100.0f;
 
 	CubeVertex cube[] = {
 		//back
@@ -74,7 +74,7 @@ namespace UE {
 	void SkyboxRenderer::Draw(Camera* camera)
 	{
 		bool isDepthTestEnable = glIsEnabled(GL_DEPTH_TEST);
-		glDisable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 
 		glm::mat4 cameraView = camera->GetViewMatrix();
 		glm::mat4 projection = camera->GetProjectionMatrix();
@@ -87,9 +87,9 @@ namespace UE {
 		glUniformMatrix4fv(m_ViewUniformID, 1, GL_FALSE, glm::value_ptr(cameraView));
 		glUniformMatrix4fv(m_ProjectionUniformID, 1, GL_FALSE, glm::value_ptr(projection));
 
-		glEnableVertexAttribArray(m_VertexLocation);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboSkybox);
 
+		glEnableVertexAttribArray(m_VertexLocation);
 		glVertexAttribPointer(m_VertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(CubeVertex), (void*)offsetof(CubeVertex, x));
 
 		glActiveTexture(GL_TEXTURE0);
@@ -99,7 +99,7 @@ namespace UE {
 		glDisableVertexAttribArray(m_VertexLocation);
 		glUseProgram(0);
 		if (isDepthTestEnable) {
-			glEnable(GL_DEPTH_TEST);
+			glDisable(GL_DEPTH_TEST);
 		}
 
 	}

@@ -42,24 +42,8 @@ namespace UE {
 
 	void UE::ModelRenderer::Init()
 	{
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		/*	const GLchar* vertexShaderCode[] = {
-			"#version 140\n"
-			"in vec3 vertexPos3D;\n"
-			"in vec4 vColour;\n"
-			"out vec4 fColour;\n"
-			"uniform mat4 transform;\n"
-			"uniform mat4 view;\n"
-			"uniform mat4 projection;\n"
-			"void main() {\n"
-				"vec4 v = vec4(vertexPos3D.xyz, 1);\n"
-				"v = projection * view * transform * v;\n"
-				"gl_Position = v;\n"
-				"fColour = vColour;\n"
-			"}\n"
-			};*/
-
-		const GLchar* vertexShaderCode[] = {
+		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER); //	ID
+		const GLchar* vertexShaderCode = {
 			"#version 140\n"
 			"in vec3 vertexPos3D;\n"
 			"in vec2 vUV;\n"
@@ -75,7 +59,7 @@ namespace UE {
 			"}\n"
 		};
 
-		glShaderSource(vertexShader, 1, vertexShaderCode, NULL);
+		glShaderSource(vertexShader, 1, &vertexShaderCode, NULL);
 		glCompileShader(vertexShader);
 
 		GLint shaderCompiled = GL_FALSE;
@@ -86,17 +70,8 @@ namespace UE {
 			return;
 		}
 
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		//const GLchar* fragmentShaderCode[] = {
-		//	"#version 140\n"
-		//	"in vec4 fColour;\n"
-		//	"out vec4 fragmentColour;\n"
-		//	"void main()"
-		//	"{"
-		//		"fragmentColour = fColour;"
-		//	"}"
-		//};
-		const GLchar* fragmentShaderCode[] = {
+		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); //	ID
+		const GLchar* fragmentShaderCode = {
 			"#version 140\n"
 			"in vec2 uv;\n"
 			"uniform sampler2D sampler;\n"
@@ -107,7 +82,7 @@ namespace UE {
 			"}"
 		};
 
-		glShaderSource(fragmentShader, 1, fragmentShaderCode, NULL);
+		glShaderSource(fragmentShader, 1, &fragmentShaderCode, NULL);
 		glCompileShader(fragmentShader);
 
 		shaderCompiled = GL_FALSE;
@@ -117,7 +92,6 @@ namespace UE {
 			DisplayShaderCompilationError(fragmentShader);
 			return;
 		}
-
 
 		m_ProgramID = glCreateProgram();
 
@@ -153,6 +127,9 @@ namespace UE {
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboModel);
 
 		glBufferData(GL_ARRAY_BUFFER, m_Model->GetNumVertices() * sizeof(Vertex), m_Model->GetVertices(), GL_STATIC_DRAW);
+	
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
 	}
 
 	void UE::ModelRenderer::Update()
@@ -179,13 +156,13 @@ namespace UE {
 		glUniformMatrix4fv(m_ViewUniformID, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 		glUniformMatrix4fv(m_ProjectionUniformID, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
+		glBindBuffer(GL_ARRAY_BUFFER, m_VboModel);
+
 		glVertexAttribPointer(m_VertexPos3DLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, x));
 		glEnableVertexAttribArray(m_VertexPos3DLocation);
 
 		glVertexAttribPointer(m_VertexUVLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, u));
 		glEnableVertexAttribArray(m_VertexUVLocation);
-
-		glBindBuffer(GL_ARRAY_BUFFER, m_VboModel);
 
 		glActiveTexture(GL_TEXTURE0);
 		glUniform1i(m_SamplerID, 0);

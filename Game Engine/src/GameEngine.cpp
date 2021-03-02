@@ -57,16 +57,16 @@ bool UE::GameEngine::Init(bool vsync)
 	);
 
 	m_Model = new Model();
-	bool result = m_Model->LoadFromFile("resources/models/colosseum.obj");
+	bool result = m_Model->LoadFromFile("resources/models/bed.obj");
 	if (!result) {
 		std::cerr << "Failed to load model!\n";
 	}
 
-	m_Texture = new Texture("resources/models/colosseum.jpg");
+	m_Texture = new Texture("resources/models/texture.jpg");
 
 	m_ModelRenderer = new ModelRenderer(m_Model);
 	m_ModelRenderer->Init();
-	m_ModelRenderer->SetRotation({ -90.0f, 0.0f, 0.0f });
+	m_ModelRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 	m_ModelRenderer->SetScale({ 3,3,3 });
 	m_ModelRenderer->SetMaterial(m_Texture);
 
@@ -74,8 +74,6 @@ bool UE::GameEngine::Init(bool vsync)
 								   "resources/skybox/left.png",  "resources/skybox/right.png",
 								   "resources/skybox/top.png",   "resources/skybox/bottom.png" );
 							
-
-
 	return true;
 }
 
@@ -184,19 +182,6 @@ void UE::GameEngine::Input()
 
 void UE::GameEngine::Update()
 {
-	//m_ModelRenderer->SetRotation({ 0.0f, m_ModelRenderer->GetRotation().y + 1, 0.0f });
-
-	//glm::mat4 cam_rot = glm::mat4(1.0f);
-
-	//cam_rot = glm::rotate(cam_rot, glm::radians(0.125f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-	//glm::vec4 temp = glm::vec4(dist, 0.0f);
-
-	//temp = temp * cam_rot;
-
-	//dist = glm::vec3(temp.x, temp.y, temp.z);
-
-	//m_Camera->SetTarget(dist);
 
 }
 
@@ -206,8 +191,8 @@ void UE::GameEngine::Draw()
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_ModelRenderer->Draw(m_Camera);
 	m_Skybox->Draw(m_Camera);
+	m_ModelRenderer->Draw(m_Camera);
 
 	SDL_GL_SwapWindow(m_Window);
 }
