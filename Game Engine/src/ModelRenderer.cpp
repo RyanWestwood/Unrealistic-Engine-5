@@ -28,7 +28,7 @@ namespace UE {
 		}
 	}
 
-	UE::ModelRenderer::ModelRenderer(Model* model)
+	UE::Renderer::Renderer(Mesh* model)
 	{
 		m_Position = { 0.0f, 0.0f, 0.0f };
 		m_Rotation = { 0.0f, 0.0f, 0.0f };
@@ -36,11 +36,11 @@ namespace UE {
 		m_Model = model;
 	}
 
-	UE::ModelRenderer::~ModelRenderer()
+	UE::Renderer::~Renderer()
 	{
 	}
 
-	void UE::ModelRenderer::Init()
+	void UE::Renderer::Init()
 	{
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER); //	ID
 		const GLchar* vertexShaderCode = {
@@ -132,11 +132,11 @@ namespace UE {
 		glDeleteShader(fragmentShader);
 	}
 
-	void UE::ModelRenderer::Update()
+	void UE::Renderer::Update()
 	{
 	}
 
-	void UE::ModelRenderer::Draw(Camera* camera)
+	void UE::Renderer::Draw(Camera* camera)
 	{
 		glEnable(GL_CULL_FACE);
 
@@ -178,7 +178,7 @@ namespace UE {
 		glDisable(GL_CULL_FACE);
 	}
 
-	void UE::ModelRenderer::Free()
+	void UE::Renderer::Free()
 	{
 		glDeleteProgram(m_ProgramID);
 		glDeleteBuffers(1, &m_VboModel);

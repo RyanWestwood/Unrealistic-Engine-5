@@ -3,10 +3,10 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-#include "Camera.h"
-#include "ModelRenderer.h"
-#include "Texture.h"
 #include "SkyboxRenderer.h"
+#include "Model.h"
+#include "Billboard.h"
+#include "BillboardRenderer.h"
 
 namespace UE {
 
@@ -31,10 +31,11 @@ namespace UE {
 		SDL_Window* m_Window;
 		SDL_GLContext m_Context;
 		Camera* m_Camera;
-		ModelRenderer* m_ModelRenderer;
-		Model* m_Model;
-		Texture* m_Texture;
+		std::vector<Model*> m_Models;
 		SkyboxRenderer* m_Skybox;
+
+		Billboard* m_Billboard;
+		BillboardRenderer* m_BillboardRender;
 
 		glm::vec3 dist;
 	};

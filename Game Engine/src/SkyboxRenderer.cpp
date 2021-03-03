@@ -74,7 +74,7 @@ namespace UE {
 	void SkyboxRenderer::Draw(Camera* camera)
 	{
 		bool isDepthTestEnable = glIsEnabled(GL_DEPTH_TEST);
-		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
 
 		glm::mat4 cameraView = camera->GetViewMatrix();
 		glm::mat4 projection = camera->GetProjectionMatrix();
@@ -99,9 +99,8 @@ namespace UE {
 		glDisableVertexAttribArray(m_VertexLocation);
 		glUseProgram(0);
 		if (isDepthTestEnable) {
-			glDisable(GL_DEPTH_TEST);
+			glEnable(GL_DEPTH_TEST);
 		}
-
 	}
 
 	void SkyboxRenderer::Free()
@@ -111,7 +110,7 @@ namespace UE {
 		glDeleteTextures(1, &m_SkyboxCubeMapName);
 	}
 
-	void SkyboxRenderer::CreateCubemap(std::array<std::string, 6> filenames)
+	void SkyboxRenderer::CreateCubemap(std::array<std::string,6> filenames)
 	{
 		glGenTextures(1, &m_SkyboxCubeMapName);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubeMapName);
@@ -147,6 +146,7 @@ namespace UE {
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
 	}
 
 	void SkyboxRenderer::CreateCubeVBO()

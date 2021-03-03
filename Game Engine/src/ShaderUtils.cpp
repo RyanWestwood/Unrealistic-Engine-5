@@ -1,5 +1,6 @@
 #include "ShaderUtils.h"
 #include <iostream>
+#include <fstream>
 
 namespace UE {
 
@@ -27,6 +28,21 @@ namespace UE {
 			// Release the memory allocated to the string
 			delete[] Msg;
 		}
+	}
+
+	std::string LoadShaderSourceCode(std::string filename)
+	{
+		std::ifstream ifs(filename);
+
+		if (!ifs.is_open()) {
+			std::cerr << "Problem opening file: " << filename << " Check file is in the directory" << std::endl;
+			return std::string("no shader");
+		}
+
+		std::string shader_source((std::istreambuf_iterator<char>(ifs)),
+			(std::istreambuf_iterator<char>()));
+
+		return shader_source;
 	}
 
 	bool CompileProgram(const GLchar* v_shader_sourcecode[], const GLchar* f_shader_sourcecode[], GLuint* programId) {

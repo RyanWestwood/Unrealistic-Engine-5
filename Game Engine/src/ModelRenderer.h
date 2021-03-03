@@ -3,15 +3,15 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "Camera.h"
-#include "Model.h"
+#include "Mesh.h"
 #include "Texture.h"
 
 namespace UE {
 
-	class ModelRenderer {
+	class Renderer {
 	public:
-		ModelRenderer(Model* model);
-		~ModelRenderer();
+		Renderer(Mesh* model);
+		~Renderer();
 
 		void Init();
 
@@ -44,7 +44,7 @@ namespace UE {
 		GLuint m_ProjectionUniformID;
 		GLuint m_SamplerID;
 
-		Model* m_Model;
+		Mesh* m_Model;
 		Texture* m_Texture;
 	};
 }

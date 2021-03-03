@@ -1,6 +1,7 @@
 #include "GameEngine.h"
 #include <iostream>
 
+
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 576
 #define ASPECT_RATIO SCREEN_WIDTH / SCREEN_HEIGHT
@@ -50,25 +51,34 @@ bool UE::GameEngine::Init(bool vsync)
 	dist = glm::vec3(0.0f, 0.0f, -100.0f);
 
 	m_Camera = new Camera(
-		glm::vec3(0.0f, 0.0f, 5.0f),
+		glm::vec3(0.0f, 1.0f, 5.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f) + dist,
 		glm::vec3(0.0f, 1.0f, 0.0f),
 		45.0f, ASPECT_RATIO, 0.1f, 1000.0f
 	);
 
-	m_Model = new Model();
-	bool result = m_Model->LoadFromFile("resources/models/bed.obj");
-	if (!result) {
-		std::cerr << "Failed to load model!\n";
-	}
+	m_Models.reserve(100);
+	m_Models.emplace_back(new Model("ground_grass.obj", "textureGreen.jpg"));
+	m_Models.back()->SetPosition({ 0.0f, 0.0f, 0.0f });
+	m_Models.back()->SetScale({ 100.0f, 100.0f, 100.0f });
+	m_Models.emplace_back(new Model("bed.obj", "textureOrange.jpg"));
+	m_Models.back()->SetPosition({ -3.0f, 0.0f, 1.0f });
+	m_Models.emplace_back(new Model("tree_palmShort.obj", "textureBlue.jpg"));
+	m_Models.back()->SetPosition({ 0.0f, 0.0f, -3.0f });
+	m_Models.emplace_back(new Model("campfire_stones.obj", "textureOrange.jpg"));
+	m_Models.back()->SetPosition({ 1.0f, 0.0f, 1.0f });
+	m_Models.emplace_back(new Model("tent_smallOpen.obj", "textureBlue.jpg"));
+	m_Models.back()->SetPosition({ 4.0f, 0.0f, -3.0f });
+	m_Models.back()->SetRotation({ 0.0f, -45.0f, 0.0f });
+	m_Models.emplace_back(new Model("log_stack.obj", "textureOrange.jpg"));
+	m_Models.back()->SetPosition({ 2.0f, 0.0f, -3.0f });
+	m_Models.back()->SetScale({ 1.0f, 1.0f, 1.0f });
 
-	m_Texture = new Texture("resources/models/texture.jpg");
-
-	m_ModelRenderer = new ModelRenderer(m_Model);
-	m_ModelRenderer->Init();
-	m_ModelRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-	m_ModelRenderer->SetScale({ 3,3,3 });
-	m_ModelRenderer->SetMaterial(m_Texture);
+	m_Billboard = new Billboard("tree.png");
+	m_Billboard->SetScale({ 5.0f, 5.0f, 0.0f });
+	m_Billboard->SetPosition({ 7.0f,0.0f, -7.0f });
+	m_BillboardRender = new BillboardRenderer();
+	m_BillboardRender->Init();
 
 	m_Skybox = new SkyboxRenderer( "resources/skybox/front.png", "resources/skybox/back.png",
 								   "resources/skybox/left.png",  "resources/skybox/right.png",
@@ -192,15 +202,21 @@ void UE::GameEngine::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_Skybox->Draw(m_Camera);
-	m_ModelRenderer->Draw(m_Camera);
+	for (auto& model : m_Models) {
+		model->Draw(m_Camera);
+	}
+	m_BillboardRender->Draw(m_Billboard, m_Camera);
 
 	SDL_GL_SwapWindow(m_Window);
 }
 
 void UE::GameEngine::Free()
 {
-	m_ModelRenderer->Free();
-	delete m_Model;
+	//	TODO: Use smart pointers.
+	for (auto& item : m_Models) {
+		delete item;
+	}
+	m_Models.clear();
 	delete m_Camera;
 	delete m_Skybox;
 	SDL_DestroyWindow(m_Window);

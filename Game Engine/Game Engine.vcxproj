@@ -159,8 +159,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Billboard.cpp" />
+    <ClCompile Include="src\BillboardRenderer.cpp" />
     <ClCompile Include="src\GameEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelRenderer.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
@@ -168,9 +171,12 @@
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Billboard.h" />
+    <ClInclude Include="src\BillboardRenderer.h" />
+    <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GameEngine.h" />
-    <ClInclude Include="src\Model.h" />
+    <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\ModelRenderer.h" />
     <ClInclude Include="src\ShaderUtils.h" />
     <ClInclude Include="src\SkyboxRenderer.h" />

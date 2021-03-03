@@ -17,7 +17,7 @@ namespace UE {
 						std::string top,   std::string bottom ) 
 		{
 
-			std::array<std::string, 6> filenames;
+			std::array<std::string,6> filenames;
 			filenames[0] = right;
 			filenames[1] = left;
 			filenames[2] = top;
@@ -36,7 +36,7 @@ namespace UE {
 		void Free();
 
 	private:
-		void CreateCubemap(std::array<std::string, 6> filenames);
+		void CreateCubemap(std::array<std::string,6> filenames);
 		void CreateCubeVBO();
 		void CreateSkyboxProgram();
 

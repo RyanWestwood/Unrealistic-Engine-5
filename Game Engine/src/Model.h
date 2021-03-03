@@ -1,37 +1,40 @@
 #pragma once
-namespace UE {
-	struct Vertex {
-		Vertex(float x, float y, float z, float u, float v) : x(x), y(y), z(z), u(u), v(v) {}
-		Vertex() { x = y = z = 0.0f; u = v = 0.0f; }
+#include "Mesh.h"
+#include "ModelRenderer.h"
+#include "Texture.h"
 
-		float x, y, z;
-		float u, v;
+namespace UE {
+
+	//	TODO: Have this as a subsitute somehow in model renderer.
+	struct Transform {
+		glm::vec3 position;
+		glm::vec3 rotation;
+		glm::vec3 scale;
 	};
 
 	class Model {
 	public:
-		Model() {
-			m_Vertices = nullptr;
-			m_NumVertices = 0;
-		}
+		Model(const char* modelPath, const char* texturePath);
 
-		~Model() {
-			delete m_Vertices;
-		}
+		void Draw(Camera* camera);
 
-		bool LoadFromFile(const char* filename);
+		void SetPosition(glm::vec3 position) { m_ModelRenderer->SetPosition(position); }
+		void SetRotation(glm::vec3 rotation) { m_ModelRenderer->SetRotation(rotation); }
+		void SetScale(glm::vec3 scale) { m_ModelRenderer->SetScale(scale); }
 
-		void* GetVertices() {
-			return (void*)m_Vertices;
-		}
+		//void SetPosition(glm::vec3 position) { m_Transform.position = position; }
+		//void SetRotation(glm::vec3 rotation) { m_Transform.rotation = rotation; }
+		//void SetScale(glm::vec3 scale) { m_Transform.scale = scale; }
 
-		int GetNumVertices() {
-			return m_NumVertices;
-		}
+		//glm::vec3 GetPosition() { return m_Transform.position; }
+		//glm::vec3 GetRotation() { return m_Transform.rotation; }
+		//glm::vec3 GetScale() { return m_Transform.scale; }
 
 	private:
-		Vertex* m_Vertices;
-		int m_NumVertices;
+		Renderer* m_ModelRenderer;
+		Mesh* m_Model;
+		Texture* m_Texture;
+		//	TODO: pass as reference?
+		Transform m_Transform;
 	};
-
 }
