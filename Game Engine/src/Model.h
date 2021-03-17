@@ -34,7 +34,7 @@ namespace UE {
 		Renderer* m_ModelRenderer;
 		Mesh* m_Model;
 		Texture* m_Texture;
-		//	TODO: pass as reference?
+		//	TODO: pass as reference to renderer?
 		Transform m_Transform;
 	};
 }
