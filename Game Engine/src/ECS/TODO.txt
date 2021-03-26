@@ -1,0 +1,7 @@
+ECS 
+Base component
+derived components - 
+	transform 
+	model renderer?
+	image renderer?
+	particle system?

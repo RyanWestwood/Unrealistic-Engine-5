@@ -2,11 +2,12 @@
 #include <GL/glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
-
-#include "SkyboxRenderer.h"
+#include <functional>
+#include <iostream>
+#include <algorithm>
+#include "Skybox.h"
 #include "Model.h"
 #include "Billboard.h"
-#include "BillboardRenderer.h"
 
 namespace UE {
 
@@ -22,7 +23,6 @@ namespace UE {
 		void Input();
 		void Update();
 		void Draw();
-
 		void Free();
 
 		void SetWindowTitle(const char* title);
@@ -30,13 +30,11 @@ namespace UE {
 	private:
 		SDL_Window* m_Window;
 		SDL_GLContext m_Context;
-		Camera* m_Camera;
-		std::vector<Model*> m_Models;
-		SkyboxRenderer* m_Skybox;
 
-		Billboard* m_Billboard;
-		BillboardRenderer* m_BillboardRender;
-
+		std::vector<std::unique_ptr<Model>> m_Models;
+		std::unique_ptr<Skybox> m_Skybox;
+		std::shared_ptr<Camera> m_Camera;
+		std::shared_ptr<Billboard> m_Billboard;
 		glm::vec3 dist;
 	};
 

@@ -3,11 +3,35 @@ C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(137,33): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(140,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(143,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\include\xmemory(230,33): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\include\memory(1427): message : see reference to function template instantiation 'void std::_Construct_in_place<_Ty,glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,float,int,float,float>(_Ty &,glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,float &&,int &&,float &&,float &&) noexcept(false)' being compiled
+          with
+          [
+              _Ty=UE::Camera
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\include\memory(2071): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,float,int,float,float>(glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,float &&,int &&,float &&,float &&)' being compiled
+          with
+          [
+              _Ty=UE::Camera
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.27.29110\include\memory(2072): message : see reference to function template instantiation 'std::_Ref_count_obj2<_Ty>::_Ref_count_obj2<glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,glm::vec<3,float,glm::packed_highp>,float,int,float,float>(glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,glm::vec<3,float,glm::packed_highp> &&,float &&,int &&,float &&,float &&)' being compiled
+          with
+          [
+              _Ty=UE::Camera
+          ]
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\GameEngine.cpp(58): message : see reference to function template instantiation 'std::shared_ptr<UE::Camera> std::make_shared<UE::Camera,glm::vec3,glm::vec<3,float,glm::packed_highp>,glm::vec3,float,int,float,float>(glm::vec3 &&,glm::vec<3,float,glm::packed_highp> &&,glm::vec3 &&,float &&,int &&,float &&,float &&)' being compiled
   Model.cpp
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(136,33): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(137,33): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(140,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(143,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Model.cpp(39,32): warning C4018: '<': signed/unsigned mismatch
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Model.cpp(42,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Model.cpp(54,39): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   main.cpp
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(136,33): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 C:\Users\RyanW\Documents\Work\GitHub\Year-2\CMP5334-Programming-for-Game-Engines\Game Engine\src\Camera.h(137,33): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
