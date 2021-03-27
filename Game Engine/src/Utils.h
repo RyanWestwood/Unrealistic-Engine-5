@@ -8,7 +8,7 @@ namespace UE {
 	void DisplayShaderCompilationError(GLuint shaderID);
 	void DisplayProgramCompilationError(GLuint programID);
 	std::string LoadShaderSourceCode(std::string filename);
-	
+
 	const std::string g_ShaderDirectory = "resources/shaders/";
 	const std::string g_ModelDirectory = "resources/models/";
 	const std::string g_TextureDirectory = "resources/textures/";

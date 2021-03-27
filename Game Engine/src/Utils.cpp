@@ -1,7 +1,6 @@
 #include "Utils.h"
 
 namespace UE {
-
 	void DisplayShaderCompilationError(GLuint shaderID) {
 		GLint MsgLen = 0;
 
@@ -43,7 +42,6 @@ namespace UE {
 	}
 
 	bool CompileProgram(const GLuint& v_id, const GLchar* v_shader_sourcecode[], const GLuint& f_id, const GLchar* f_shader_sourcecode[], GLuint& programId) {
-
 		glShaderSource(v_id, 1, v_shader_sourcecode, NULL);
 		glCompileShader(v_id);
 

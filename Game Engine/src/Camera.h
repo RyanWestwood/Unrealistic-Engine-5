@@ -4,11 +4,10 @@
 #include <SDL.h>
 
 namespace UE {
-
 	class Camera {
 	public:
 		Camera(
-			glm::vec3 position, 
+			glm::vec3 position,
 			glm::vec3 target,
 			glm::vec3 upDirection,
 			float fieldOfView, float aspectRatio, float nearClippingPlane, float farClippingPane
@@ -28,7 +27,7 @@ namespace UE {
 			SDL_GetMouseState(&m_OldMouseX, &m_OldMouseY);
 		};
 
-		~Camera(){}
+		~Camera() {}
 
 		//	Position
 		float GetPositionX() { return m_Position.x; }

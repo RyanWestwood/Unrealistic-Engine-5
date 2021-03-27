@@ -12,17 +12,15 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace UE {
-
 	class Skybox {
-	public: 
+	public:
 
 		// Filenames
-		Skybox( std::string front, std::string back,
-						std::string left,  std::string right,
-						std::string top,   std::string bottom ) 
+		Skybox(std::string front, std::string back,
+			std::string left, std::string right,
+			std::string top, std::string bottom)
 		{
-
-			std::array<std::string,6> filenames;
+			std::array<std::string, 6> filenames;
 			filenames[0] = g_SkyboxDirectory + right;
 			filenames[1] = g_SkyboxDirectory + left;
 			filenames[2] = g_SkyboxDirectory + top;
@@ -41,7 +39,7 @@ namespace UE {
 		void Free();
 
 	private:
-		void CreateCubemap(std::array<std::string,6> filenames);
+		void CreateCubemap(std::array<std::string, 6> filenames);
 		void CreateCubeVBO();
 		void CreateSkyboxProgram();
 

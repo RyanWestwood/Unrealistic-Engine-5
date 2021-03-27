@@ -5,7 +5,6 @@
 #define ASPECT_RATIO SCREEN_WIDTH / SCREEN_HEIGHT
 
 namespace UE {
-
 	UE::GameEngine::GameEngine()
 	{
 	}
@@ -25,7 +24,7 @@ namespace UE {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-		m_Window = SDL_CreateWindow("Unrealistic Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		m_Window = SDL_CreateWindow("Unrealistic Engine 5", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 		if (m_Window == nullptr) {
 			std::cerr << "Unable to create window! SDL Error: " << SDL_GetError() << "\n";
 			return false;
@@ -47,6 +46,8 @@ namespace UE {
 			std::cerr << "Warning: unable to set vsync! SDL Error: " << SDL_GetError() << "\n";
 			return false;
 		}
+
+		SDL_ShowCursor(SDL_DISABLE);
 
 		dist = glm::vec3(0.0f, 0.0f, -100.0f);
 
@@ -108,8 +109,8 @@ namespace UE {
 		float diffX = mouseX - m_Camera->GetOldMouseX();
 		float diffY = m_Camera->GetOldMouseY() - mouseY;
 
-		m_Camera->SetYaw((m_Camera->GetYaw() + diffX) * c_MouseSensitivity);
-		m_Camera->SetPitch((m_Camera->GetPitch() + diffY) * c_MouseSensitivity);
+		m_Camera->SetYaw(m_Camera->GetYaw() + (diffX * c_MouseSensitivity));
+		m_Camera->SetPitch(m_Camera->GetPitch() + (diffY * c_MouseSensitivity));
 
 		glm::vec3 direction;
 		direction.x = cos(glm::radians(m_Camera->GetYaw())) * cos(glm::radians(m_Camera->GetPitch()));
@@ -187,11 +188,12 @@ namespace UE {
 		m_Camera->UpdateCameraMatrices();
 		m_Camera->SetOldMouseX(SCREEN_WIDTH / 2);
 		m_Camera->SetOldMouseY(SCREEN_HEIGHT / 2);
+
+		SDL_WarpMouseInWindow(m_Window, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	}
 
 	void UE::GameEngine::Update()
 	{
-
 	}
 
 	void UE::GameEngine::Draw()
@@ -201,7 +203,7 @@ namespace UE {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		m_Skybox->Draw(m_Camera);
-		for (std::unique_ptr<Model>& model : m_Models) 
+		for (std::unique_ptr<Model>& model : m_Models)
 			model->Draw(m_Camera);
 		m_Billboard->Draw();
 
@@ -225,4 +227,3 @@ namespace UE {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Unrealistic Engine", msg, nullptr);
 	}
 }
-

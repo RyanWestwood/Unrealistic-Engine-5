@@ -1,7 +1,6 @@
 #include "Skybox.h"
 
 namespace UE {
-
 	const float SIDE = 100.0f;
 
 	glm::vec3 cube[] = {
@@ -99,7 +98,7 @@ namespace UE {
 		glDeleteTextures(1, &m_SkyboxCubeMapName);
 	}
 
-	void Skybox::CreateCubemap(std::array<std::string,6> filenames)
+	void Skybox::CreateCubemap(std::array<std::string, 6> filenames)
 	{
 		glGenTextures(1, &m_SkyboxCubeMapName);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubeMapName);
@@ -107,7 +106,7 @@ namespace UE {
 		for (int face = 0; face < 6; face++)
 		{
 			SDL_Surface* surfaceImage = IMG_Load(filenames[face].c_str());
-			if (surfaceImage == nullptr) return; 
+			if (surfaceImage == nullptr) return;
 			GLenum format = surfaceImage->format->format;
 			switch (format) {
 			case SDL_PIXELFORMAT_RGBA32:
@@ -120,11 +119,10 @@ namespace UE {
 				format = GL_RGB;
 				break;
 			}
-			//	TODO: This causes huge memory leak?
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, 
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0,
 				format,
-				surfaceImage->w, surfaceImage->h, 
-				0, 
+				surfaceImage->w, surfaceImage->h,
+				0,
 				format,
 				GL_UNSIGNED_BYTE,
 				surfaceImage->pixels
@@ -169,6 +167,7 @@ namespace UE {
 		m_VertexLocation = glGetAttribLocation(m_SkyboxProgramID, "vertexPos3D");
 		if (m_VertexLocation == -1) {
 			std::cerr << "Problem getting vertex3dPos\n";
+			return;
 		}
 
 		m_ViewUniformID = glGetUniformLocation(m_SkyboxProgramID, "view");

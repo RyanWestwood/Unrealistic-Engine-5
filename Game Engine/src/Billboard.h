@@ -10,7 +10,6 @@
 #include "Utils.h"
 
 namespace UE {
-
 	class BillboardRenderer;
 
 	class Billboard : public std::enable_shared_from_this<Billboard> {
@@ -37,7 +36,7 @@ namespace UE {
 
 	class BillboardRenderer {
 	public:
-		BillboardRenderer(std::shared_ptr<Billboard> b, std::shared_ptr<Camera> camera) : m_Billboard(b), m_Camera(camera) {}
+		BillboardRenderer(std::shared_ptr<Billboard> billboard, std::shared_ptr<Camera> camera) : m_Billboard(billboard), m_Camera(camera) {}
 
 		~BillboardRenderer() { glDeleteBuffers(1, &vboQuad); }
 

@@ -16,7 +16,6 @@
 #include <assimp/postprocess.h>
 
 namespace UE {
-
 	class Mesh {
 	public:
 		Mesh() {
@@ -90,5 +89,4 @@ namespace UE {
 		std::unique_ptr<MeshRenderer> m_ModelRenderer;
 		std::shared_ptr<Texture> m_Texture;
 	};
-
 }

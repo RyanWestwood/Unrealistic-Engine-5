@@ -10,7 +10,6 @@
 #include "Billboard.h"
 
 namespace UE {
-
 	class GameEngine {
 	public:
 

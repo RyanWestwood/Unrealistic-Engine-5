@@ -1,7 +1,6 @@
 #include "Billboard.h"
 
 namespace UE {
-
 	Vertex billboard[] = {
 		Vertex(0.5f, 1.0f, 0.0f, 1.0f, 1.0f),
 		Vertex(-0.5f, 1.0f, 0.0f, 0.0f, 1.0f),
@@ -56,7 +55,7 @@ namespace UE {
 		transformationMat = glm::translate(transformationMat, m_Billboard->GetPosition());
 
 		transformationMat = glm::rotate(transformationMat,
-			glm::radians(360.0f - m_Camera->GetYaw()),
+			glm::radians(270 - m_Camera->GetYaw()),
 			glm::vec3(0.0f, 1.0f, 0.0f));
 
 		transformationMat = glm::scale(transformationMat, glm::vec3(m_Billboard->GetScale().x, m_Billboard->GetScale().y, 0.0f));
@@ -93,9 +92,9 @@ namespace UE {
 		glDisable(GL_CULL_FACE);
 	}
 
-	Billboard::Billboard(std::string texturePath, std::shared_ptr<Camera> c)
+	Billboard::Billboard(std::string texturePath, std::shared_ptr<Camera> camera)
 	{
-		m_Camera = c;
+		m_Camera = camera;
 		m_Texture = std::make_unique<Texture>((g_TextureDirectory + texturePath).c_str());
 		m_Position = { 0.0f,0.0f,0.0f };
 		m_Scale = { 0.0f,0.0f,0.0f };

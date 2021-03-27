@@ -6,9 +6,7 @@ UE::Model::Model(const char* modelPath, const char* texturePath)
 {
 	m_Model = std::make_shared<Mesh>();
 	bool result = m_Model->LoadFromFile((g_ModelDirectory + std::string(modelPath)).c_str());
-	if (!result) {
-		std::cerr << "Failed to load model!\n";
-	}
+	if (!result) std::cerr << "Failed to load model!\n";
 
 	m_Texture = std::make_shared<Texture>((g_TextureDirectory + std::string(texturePath)).c_str());
 
@@ -32,9 +30,7 @@ bool UE::Mesh::LoadFromFile(const char* filename)
 
 	const aiScene* pScene = importer.ReadFile(filename, aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs);
 
-	if (!pScene) {
-		return false;
-	}
+	if (!pScene) return false;
 
 	for (int MeshIdx = 0; MeshIdx < pScene->mNumMeshes; MeshIdx++)
 	{
@@ -91,11 +87,13 @@ void UE::MeshRenderer::Init()
 	m_VertexPos3DLocation = glGetAttribLocation(m_ProgramID, "vertexPos3D");
 	if (m_VertexPos3DLocation == -1) {
 		std::cerr << "Problem getting vertexPos3D\n";
+		return;
 	}
 
 	m_VertexUVLocation = glGetAttribLocation(m_ProgramID, "vUV");
 	if (m_VertexUVLocation == -1) {
 		std::cerr << "Problem getting vUV\n";
+		return;
 	}
 
 	m_TransformUniformID = glGetUniformLocation(m_ProgramID, "transform");

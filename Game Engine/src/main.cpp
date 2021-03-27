@@ -8,7 +8,6 @@
 using namespace UE;
 
 int main(int argv, char* argc[]) {
-
 	GameEngine gameEngine;
 
 	if (!gameEngine.Init(true)) {
@@ -28,7 +27,7 @@ int main(int argv, char* argc[]) {
 		current_time = SDL_GetTicks();
 
 		if (current_time - last_time > 1000) {
-			gameEngine.SetWindowTitle(std::string("FPS: " + std::to_string(frame_count)).c_str());
+			gameEngine.SetWindowTitle(std::string("Unrealistic Engine 5 - FPS: " + std::to_string(frame_count)).c_str());
 			frame_count = 0;
 			last_time = current_time;
 		}
