@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace UE {
-	void UE::Texture::LoadTexture(std::string filename)
+	void UE::Texture::LoadTexture(const std::string& filename)
 	{
 		SDL_Surface* surfaceImage = IMG_Load(filename.c_str());
 		if (surfaceImage == nullptr) {
@@ -38,4 +38,4 @@ namespace UE {
 
 		SDL_FreeSurface(surfaceImage);
 	}
-}
+} // namespace UE

@@ -1,15 +1,16 @@
 #pragma once
+#include <GL/glew.h>
+#include "CrossPlatform.h"
+
 #include "Camera.h"
 #include "Utils.h"
 #include "Utils.h"
-#include <GL/glew.h>
-#include <SDL_opengl.h>
 #include <vector>
 #include <array>
 #include <string>
-#include <SDL_image.h>
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
+#include <memory>
 
 namespace UE {
 	class Skybox {
@@ -35,7 +36,7 @@ namespace UE {
 
 		~Skybox() {}
 
-		void Draw(std::shared_ptr<Camera> camera);
+		void Draw(const std::shared_ptr<Camera>& camera);
 		void Free();
 
 	private:

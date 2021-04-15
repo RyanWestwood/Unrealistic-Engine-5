@@ -3,15 +3,21 @@
 #include "GameEngine.h"
 #include <iostream>
 #include <string>
-#include <glm/glm.hpp>
+//#include "ObjectPooler.h"
 
 using namespace UE;
+constexpr int c_Delta = 1000 / 60;
+
 
 int main(int argv, char* argc[]) {
+
+	// TODO: Test this pool works. Optimize to minimise if branching. 
+	// ObjectPool<Test> objPool = ObjectPool<Test>(100);
+
 	GameEngine gameEngine;
 
 	if (!gameEngine.Init(true)) {
-		UE::DisplayInfoMessages("Couldn't load SDL! Check console output for more details.");
+		DisplayInfoMessages("Couldn't load SDL! Check console output for more details.");
 	}
 
 	uint32_t last_time = SDL_GetTicks();
@@ -19,17 +25,19 @@ int main(int argv, char* argc[]) {
 	uint16_t frame_count = 0;
 
 	while (gameEngine.IsRunning()) {
-		gameEngine.Input();
-		gameEngine.Update();
-		gameEngine.Draw();
+		if (!gameEngine.IsPaused()) {
+			frame_count++;
+			current_time = SDL_GetTicks();
 
-		frame_count++;
-		current_time = SDL_GetTicks();
-
-		if (current_time - last_time > 1000) {
-			gameEngine.SetWindowTitle(std::string("Unrealistic Engine 5 - FPS: " + std::to_string(frame_count)).c_str());
-			frame_count = 0;
-			last_time = current_time;
+			gameEngine.Input();
+			if (current_time - last_time > c_Delta) {
+				gameEngine.Update();
+				last_time = current_time;
+				//TODO: This is 144/60 so 3.
+				gameEngine.SetWindowTitle(std::string("Unrealistic Engine 5 - FPS: " + std::to_string(frame_count)).c_str());
+				frame_count = 0;
+			}
+			gameEngine.Draw();
 		}
 	}
 	gameEngine.Free();

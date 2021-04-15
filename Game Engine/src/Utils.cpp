@@ -19,20 +19,20 @@ namespace UE {
 		glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &msgLen);
 		if (msgLen > 0) {
 			GLchar* msg = new GLchar[int64_t(msgLen) + 1];
-			glGetProgramInfoLog(programID, msgLen, NULL, msg);
+			glGetProgramInfoLog(programID, msgLen, nullptr, msg);
 			std::cerr << "Error linking program: " << msg << "\n";
 
 			delete[] msg;
 		}
 	}
 
-	std::string LoadShaderSourceCode(std::string filename)
+	std::string LoadShaderSourceCode(const std::string filename)
 	{
 		std::ifstream ifs(filename);
 
 		if (!ifs.is_open()) {
 			std::cerr << "Problem opening file: " << filename << " Check file is in the directory" << std::endl;
-			return std::string("no shader");
+			return std::string("No shader");
 		}
 
 		std::string shader_source((std::istreambuf_iterator<char>(ifs)),
@@ -41,8 +41,10 @@ namespace UE {
 		return shader_source;
 	}
 
-	bool CompileProgram(const GLuint& v_id, const GLchar* v_shader_sourcecode[], const GLuint& f_id, const GLchar* f_shader_sourcecode[], GLuint& programId) {
-		glShaderSource(v_id, 1, v_shader_sourcecode, NULL);
+	// bool CompileProgram(const GLuint& v_id, const GLchar* v_shader_sourcecode[], const GLuint& f_id, const GLchar* f_shader_sourcecode[], GLuint& programId) {
+
+	bool CompileProgram(const GLuint& v_id, std::vector<const GLchar*>& v_shader_sourcecode, const GLuint& f_id, std::vector<const GLchar*>& f_shader_sourcecode, GLuint& programId) {
+		glShaderSource(v_id, 1, v_shader_sourcecode.data(), nullptr);
 		glCompileShader(v_id);
 
 		GLint isShaderCompiledOK = GL_FALSE;
@@ -53,7 +55,7 @@ namespace UE {
 			return false;
 		}
 
-		glShaderSource(f_id, 1, f_shader_sourcecode, NULL);
+		glShaderSource(f_id, 1, f_shader_sourcecode.data(), nullptr);
 		glCompileShader(f_id);
 
 		isShaderCompiledOK = GL_FALSE;
@@ -81,4 +83,4 @@ namespace UE {
 
 		return true;
 	}
-}
+} // namespace UE

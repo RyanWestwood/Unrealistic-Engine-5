@@ -1,8 +1,12 @@
 #pragma once
+#include <GL/glew.h>
+//#include <GL/glut.h>
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <list>
+#include <vector>
+#include <array>
 #include <memory>
 #include "Texture.h"
 #include "Camera.h"

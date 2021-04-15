@@ -1,4 +1,7 @@
 #pragma once
+#include <GL/glew.h>
+#include "CrossPlatform.h"
+
 #include "Texture.h"
 #include "Camera.h"
 #include "Vertex.h"
@@ -6,9 +9,6 @@
 
 #include <memory>
 #include <iostream>
-#include <GL/glew.h>
-#include <SDL.h>
-#include <SDL_opengl.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <assimp/Importer.hpp>
@@ -19,30 +19,30 @@ namespace UE {
 	class Mesh {
 	public:
 		Mesh() {
-			m_Vertices = nullptr;
+			m_Vertices = {};
 			m_NumVertices = 0;
 		}
-		~Mesh() { delete m_Vertices; }
+		~Mesh() {}
 
 		bool LoadFromFile(const char* filename);
 
-		void* GetVertices() { return (void*)m_Vertices; }
+		void* GetVertices() { return m_Vertices.data(); }
 		const int& GetNumVertices() { return m_NumVertices; }
 
 	private:
-		Vertex* m_Vertices;
+		std::vector<Vertex> m_Vertices;
 		int m_NumVertices;
 	};
 
 	class MeshRenderer {
 	public:
 		MeshRenderer(std::shared_ptr<Mesh> model);
-		~MeshRenderer();
+		~MeshRenderer() = default;
 
 		void Init();
 
 		void Update();
-		void Draw(std::shared_ptr<Camera> camera);
+		void Draw(const std::shared_ptr<Camera>& camera);
 
 		void Free();
 
@@ -76,15 +76,19 @@ namespace UE {
 
 	class Model {
 	public:
+		Model() {}
+		//	TODO: Remove hthis constructor?
 		Model(const char* modelPath, const char* texturePath);
 
-		void Draw(std::shared_ptr<Camera> camera);
+		void Init(const char* modelPath, const char* texturePath);
+
+		void Draw(const std::shared_ptr<Camera>& camera);
 
 		void SetPosition(glm::vec3 position) { m_ModelRenderer->SetPosition(position); }
 		void SetRotation(glm::vec3 rotation) { m_ModelRenderer->SetRotation(rotation); }
 		void SetScale(glm::vec3 scale) { m_ModelRenderer->SetScale(scale); }
 
-	private:
+		// private:
 		std::shared_ptr<Mesh> m_Model;
 		std::unique_ptr<MeshRenderer> m_ModelRenderer;
 		std::shared_ptr<Texture> m_Texture;

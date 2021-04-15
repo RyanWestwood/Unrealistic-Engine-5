@@ -163,15 +163,20 @@
     <ClCompile Include="src\GameEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Billboard.h" />
+    <ClInclude Include="src\CrossPlatform.h" />
+    <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GameEngine.h" />
+    <ClInclude Include="src\ObjectPooler.h" />
+    <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Skybox.h" />
     <ClInclude Include="src\Texture.h" />

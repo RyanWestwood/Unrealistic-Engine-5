@@ -1,7 +1,6 @@
 #pragma once
-#include <SDL.h>
 #include <GL/glew.h>
-#include <SDL_image.h>
+#include "CrossPlatform.h"
 #include <string>
 
 namespace UE {
@@ -21,7 +20,7 @@ namespace UE {
 		GLuint GetTextureName() { return m_TextureName; }
 
 	private:
-		void LoadTexture(std::string filename);
+		void LoadTexture(const std::string& filename);
 
 		int m_Width;
 		int m_Height;

@@ -1,9 +1,9 @@
 #include "Skybox.h"
 
 namespace UE {
-	const float SIDE = 100.0f;
+	const float SIDE = 100.0F;
 
-	glm::vec3 cube[] = {
+	std::array<glm::vec3, 36> cube = {
 		//back
 		glm::vec3(-SIDE,  SIDE, -SIDE),
 		glm::vec3(-SIDE, -SIDE, -SIDE),
@@ -59,7 +59,7 @@ namespace UE {
 		glm::vec3(-SIDE, SIDE, -SIDE),
 	};
 
-	void Skybox::Draw(std::shared_ptr<Camera> camera)
+	void Skybox::Draw(const std::shared_ptr<Camera>& camera)
 	{
 		bool isDepthTestEnable = glIsEnabled(GL_DEPTH_TEST);
 		glDisable(GL_DEPTH_TEST);
@@ -67,9 +67,9 @@ namespace UE {
 		glm::mat4 cameraView = camera->GetViewMatrix();
 		glm::mat4 projection = camera->GetProjectionMatrix();
 
-		cameraView[3][0] = 0.0f;
-		cameraView[3][1] = 0.0f;
-		cameraView[3][2] = 0.0f;
+		cameraView[3][0] = 0.0F;
+		cameraView[3][1] = 0.0F;
+		cameraView[3][2] = 0.0F;
 
 		glUseProgram(m_SkyboxProgramID);
 		glUniformMatrix4fv(m_ViewUniformID, 1, GL_FALSE, glm::value_ptr(cameraView));
@@ -78,7 +78,7 @@ namespace UE {
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboSkybox);
 
 		glEnableVertexAttribArray(m_VertexLocation);
-		glVertexAttribPointer(m_VertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)offsetof(glm::vec3, x));
+		glVertexAttribPointer(m_VertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), reinterpret_cast<void*>(offsetof(glm::vec3, x)));
 
 		glActiveTexture(GL_TEXTURE0);
 		glUniform1i(m_SamplerID, 0);
@@ -144,7 +144,7 @@ namespace UE {
 	{
 		glGenBuffers(1, &m_VboSkybox);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboSkybox);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube.data(), GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboSkybox);
 	}
 
@@ -152,11 +152,11 @@ namespace UE {
 	{
 		GLuint v_id = glCreateShader(GL_VERTEX_SHADER);
 		std::string v_shader_source = LoadShaderSourceCode(g_ShaderDirectory + "skybox.vert");
-		const GLchar* v_shader_array[] = { v_shader_source.c_str() };
+		std::vector<const GLchar*> v_shader_array = { v_shader_source.c_str() };
 
 		GLuint f_id = glCreateShader(GL_FRAGMENT_SHADER);
 		std::string f_shader_source = LoadShaderSourceCode(g_ShaderDirectory + "skybox.frag");
-		const GLchar* f_shader_array[] = { f_shader_source.c_str() };
+		std::vector<const GLchar*> f_shader_array = { f_shader_source.c_str() };
 
 		bool result = CompileProgram(v_id, v_shader_array, f_id, f_shader_array, m_SkyboxProgramID);
 		if (!result) {
@@ -177,4 +177,4 @@ namespace UE {
 		glDeleteShader(v_id);
 		glDeleteShader(f_id);
 	}
-}
+} // namespace UE

@@ -1,7 +1,7 @@
 #pragma once
+#include "CrossPlatform.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <SDL.h>
 
 namespace UE {
 	class Camera {
@@ -132,13 +132,13 @@ namespace UE {
 		}
 
 		//	Set old mouse vars
-		float GetOldMouseX() { return m_OldMouseX; }
-		float GetOldMouseY() { return m_OldMouseY; }
+		int GetOldMouseX() { return m_OldMouseX; }
+		int GetOldMouseY() { return m_OldMouseY; }
 
-		void SetOldMouseX(float oldMouseX) {
+		void SetOldMouseX(int oldMouseX) {
 			m_OldMouseX = oldMouseX;
 		}
-		void SetOldMouseY(float oldMouseY) {
+		void SetOldMouseY(int oldMouseY) {
 			m_OldMouseY = oldMouseY;
 		}
 

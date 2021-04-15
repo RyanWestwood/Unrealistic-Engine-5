@@ -1,7 +1,7 @@
 ECS 
 Base component
 derived components - 
-	transform 
+	{% comment %} transform  {% endcomment %}
 	model renderer?
 	image renderer?
 	particle system?

@@ -1,19 +1,16 @@
 #include "GameEngine.h"
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 576
-#define ASPECT_RATIO SCREEN_WIDTH / SCREEN_HEIGHT
-
 namespace UE {
-	UE::GameEngine::GameEngine()
-	{
-	}
 
-	UE::GameEngine::~GameEngine()
-	{
-	}
+	constexpr int SCREEN_WIDTH = 1024;
+	constexpr int SCREEN_HEIGHT = 576;
+	constexpr float ASPECT_RATIO = static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT;
 
-	bool UE::GameEngine::Init(bool vsync)
+	GameEngine::GameEngine() = default;
+
+	GameEngine::~GameEngine() = default;
+
+	bool GameEngine::Init(bool vsync)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 			std::cerr << "Unable to init SDL sub-systems! SDL Error: " << SDL_GetError() << "\n";
@@ -49,8 +46,6 @@ namespace UE {
 
 		SDL_ShowCursor(SDL_DISABLE);
 
-		dist = glm::vec3(0.0f, 0.0f, -100.0f);
-
 		m_Camera = std::make_shared<Camera>(
 			glm::vec3(0.0f, 1.0f, 5.0f),
 			glm::vec3(0.0f, 0.0f, 0.0f) + dist,
@@ -58,27 +53,60 @@ namespace UE {
 			45.0f, ASPECT_RATIO, 0.1f, 1000.0f
 			);
 
+		SDL_WarpMouseInWindow(m_Window, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+		m_Camera->SetOldMouseX(SCREEN_WIDTH / 2);
+		m_Camera->SetOldMouseY(SCREEN_HEIGHT / 2);
+
+		int mouseX = 512, mouseY = 512;
+		SDL_GetMouseState(&mouseX, &mouseY);
+
+		int diffX = mouseX - m_Camera->GetOldMouseX();
+		int diffY = m_Camera->GetOldMouseY() - mouseY;
+
+		m_Camera->SetYaw(m_Camera->GetYaw() + (diffX * .1F));
+		m_Camera->SetPitch(m_Camera->GetPitch() + (diffY * .1F));
+
+		glm::vec3 direction;
+		direction.x = cos(glm::radians(m_Camera->GetYaw())) * cos(glm::radians(m_Camera->GetPitch()));
+		direction.y = sin(glm::radians(m_Camera->GetPitch()));
+		direction.z = sin(glm::radians(m_Camera->GetYaw())) * cos(glm::radians(m_Camera->GetPitch()));
+		m_Camera->SetTarget(glm::normalize(direction));
+
+		m_Camera->UpdateCameraMatrices();
+		m_Camera->SetOldMouseX(SCREEN_WIDTH / 2);
+		m_Camera->SetOldMouseY(SCREEN_HEIGHT / 2);
+
+
+
+		//=== SYSTEM INTERGRATION ===
+
+
+
+		//===========================
+
+		dist = glm::vec3(0.0f, 0.0f, -100.0f);
+
 		m_Models.reserve(100);
 		m_Models.emplace_back(std::make_unique<Model>("ground_grass.obj", "textureGreen.jpg"));
-		m_Models.back()->SetPosition({ 0.0f, 0.0f, 0.0f });
-		m_Models.back()->SetScale({ 100.0f, 100.0f, 100.0f });
+		m_Models.back()->SetPosition({ 0.0F, 0.0F, 0.0F });
+		m_Models.back()->SetScale({ 100.0F, 100.0F, 100.0F });
 		m_Models.emplace_back(std::make_unique<Model>("bed.obj", "textureOrange.jpg"));
-		m_Models.back()->SetPosition({ -3.0f, 0.0f, 1.0f });
+		m_Models.back()->SetPosition({ -3.0F, 0.0F, 1.0F });
 		m_Models.emplace_back(std::make_unique<Model>("tree_palmShort.obj", "textureBlue.jpg"));
-		m_Models.back()->SetPosition({ 0.0f, 0.0f, -3.0f });
+		m_Models.back()->SetPosition({ 0.0F, 0.0F, -3.0F });
 		m_Models.emplace_back(std::make_unique<Model>("campfire_stones.obj", "textureOrange.jpg"));
-		m_Models.back()->SetPosition({ 1.0f, 0.0f, 1.0f });
+		m_Models.back()->SetPosition({ 1.0F, 0.0F, 1.0F });
 		m_Models.emplace_back(std::make_unique<Model>("tent_smallOpen.obj", "textureBlue.jpg"));
-		m_Models.back()->SetPosition({ 4.0f, 0.0f, -3.0f });
-		m_Models.back()->SetRotation({ 0.0f, -45.0f, 0.0f });
+		m_Models.back()->SetPosition({ 4.0F, 0.0F, -3.0F });
+		m_Models.back()->SetRotation({ 0.0F, -45.0F, 0.0F });
 		m_Models.emplace_back(std::make_unique<Model>("log_stack.obj", "textureOrange.jpg"));
-		m_Models.back()->SetPosition({ 2.0f, 0.0f, -3.0f });
-		m_Models.back()->SetScale({ 1.0f, 1.0f, 1.0f });
+		m_Models.back()->SetPosition({ 2.0F, 0.0F, -3.0F });
+		m_Models.back()->SetScale({ 1.0F, 1.0F, 1.0F });
 
 		m_Billboard = std::make_shared<Billboard>("tree.png", m_Camera);
 		m_Billboard->Init();
-		m_Billboard->SetScale({ 5.0f, 5.0f, 0.0f });
-		m_Billboard->SetPosition({ 7.0f,0.0f, -7.0f });
+		m_Billboard->SetScale({ 5.0F, 5.0F, 0.0F });
+		m_Billboard->SetPosition({ 7.0F,0.0F, -7.0F });
 
 		m_Skybox = std::make_unique<Skybox>("front.png", "back.png",
 			"left.png", "right.png",
@@ -87,7 +115,7 @@ namespace UE {
 		return true;
 	}
 
-	bool UE::GameEngine::IsRunning()
+	bool GameEngine::IsRunning()
 	{
 		SDL_PumpEvents();
 
@@ -95,19 +123,33 @@ namespace UE {
 		if (SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_QUIT, SDL_QUIT)) {
 			return false;
 		}
+		//TODO: Debugging close?
+		if (m_KeyDown[SDL_SCANCODE_X] == true) {
+			return false;
+		}
+
 		return true;
 	}
 
-	void UE::GameEngine::Input()
-	{
-		const float c_CameraSpeed = 1.0f;
-		const float c_MouseSensitivity = 0.1f;
+	bool GameEngine::IsPaused() {
 
-		int mouseX, mouseY;
+		if (m_KeyDown[SDL_SCANCODE_ESCAPE] == true) {
+			return true;
+			SDL_ShowCursor(SDL_ENABLE);
+		}
+		return false;
+	}
+
+	void GameEngine::Input()
+	{
+		const float c_CameraSpeed = 0.1F;
+		const float c_MouseSensitivity = 0.1F;
+
+		int mouseX = 0, mouseY = 0;
 		SDL_GetMouseState(&mouseX, &mouseY);
 
-		float diffX = mouseX - m_Camera->GetOldMouseX();
-		float diffY = m_Camera->GetOldMouseY() - mouseY;
+		int diffX = mouseX - m_Camera->GetOldMouseX();
+		int diffY = m_Camera->GetOldMouseY() - mouseY;
 
 		m_Camera->SetYaw(m_Camera->GetYaw() + (diffX * c_MouseSensitivity));
 		m_Camera->SetPitch(m_Camera->GetPitch() + (diffY * c_MouseSensitivity));
@@ -118,70 +160,30 @@ namespace UE {
 		direction.z = sin(glm::radians(m_Camera->GetYaw())) * cos(glm::radians(m_Camera->GetPitch()));
 		m_Camera->SetTarget(glm::normalize(direction));
 
-		bool keyStates[4];
-		memset(keyStates, false, sizeof(keyStates));
-
-		enum {
-			UP = 0,
-			DOWN,
-			LEFT,
-			RIGHT
-		};
-
 		SDL_Event e;
-		if (SDL_PollEvent(&e)) {
+		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_KEYDOWN) {
-				switch (e.key.keysym.scancode) {
-				case SDL_SCANCODE_W:
-				case SDL_SCANCODE_UP:
-					keyStates[UP] = true;
-					break;
-				case SDL_SCANCODE_S:
-				case SDL_SCANCODE_DOWN:
-					keyStates[DOWN] = true;
-					break;
-				case SDL_SCANCODE_A:
-				case SDL_SCANCODE_LEFT:
-					keyStates[LEFT] = true;
-					break;
-				case SDL_SCANCODE_D:
-				case SDL_SCANCODE_RIGHT:
-					keyStates[RIGHT] = true;
-					break;
+				if (e.key.keysym.scancode < 512) {
+					m_KeyDown[e.key.keysym.scancode] = true;
 				}
 			}
-			if (e.type == SDL_KEYUP) {
-				switch (e.key.keysym.scancode) {
-				case SDL_SCANCODE_W:
-				case SDL_SCANCODE_UP:
-					keyStates[UP] = false;
-					break;
-				case SDL_SCANCODE_S:
-				case SDL_SCANCODE_DOWN:
-					keyStates[DOWN] = false;
-					break;
-				case SDL_SCANCODE_A:
-				case SDL_SCANCODE_LEFT:
-					keyStates[LEFT] = false;
-					break;
-				case SDL_SCANCODE_D:
-				case SDL_SCANCODE_RIGHT:
-					keyStates[RIGHT] = false;
-					break;
+			else if (e.type == SDL_KEYUP) {
+				if (e.key.keysym.scancode < 512) {
+					m_KeyDown[e.key.keysym.scancode] = false;
 				}
 			}
 		}
 
-		if (keyStates[UP]) {
+		if (m_KeyDown[SDL_SCANCODE_W] == true) {
 			m_Camera->SetPosition(m_Camera->GetPosition() + m_Camera->GetTarget() * c_CameraSpeed);
 		}
-		if (keyStates[DOWN]) {
+		if (m_KeyDown[SDL_SCANCODE_S] == true) {
 			m_Camera->SetPosition(m_Camera->GetPosition() - m_Camera->GetTarget() * c_CameraSpeed);
 		}
-		if (keyStates[LEFT]) {
+		if (m_KeyDown[SDL_SCANCODE_A] == true) {
 			m_Camera->SetPosition(m_Camera->GetPosition() - glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
 		}
-		if (keyStates[RIGHT]) {
+		if (m_KeyDown[SDL_SCANCODE_D] == true) {
 			m_Camera->SetPosition(m_Camera->GetPosition() + glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
 		}
 
@@ -192,13 +194,14 @@ namespace UE {
 		SDL_WarpMouseInWindow(m_Window, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	}
 
-	void UE::GameEngine::Update()
+	void GameEngine::Update()
 	{
+
 	}
 
-	void UE::GameEngine::Draw()
+	void GameEngine::Draw()
 	{
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.1F, 0.1F, 0.1F, 1.0F);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -210,20 +213,20 @@ namespace UE {
 		SDL_GL_SwapWindow(m_Window);
 	}
 
-	void UE::GameEngine::Free()
+	void GameEngine::Free()
 	{
 		SDL_DestroyWindow(m_Window);
 		m_Window = nullptr;
 		SDL_Quit();
 	}
 
-	void UE::GameEngine::SetWindowTitle(const char* title)
+	void GameEngine::SetWindowTitle(const char* title)
 	{
 		SDL_SetWindowTitle(m_Window, title);
 	}
 
-	void UE::DisplayInfoMessages(const char* msg)
+	void DisplayInfoMessages(const char* msg)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Unrealistic Engine", msg, nullptr);
 	}
-}
+}// namespace UE
