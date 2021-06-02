@@ -171,12 +171,15 @@
   <ItemGroup>
     <ClInclude Include="src\Billboard.h" />
     <ClInclude Include="src\CrossPlatform.h" />
+    <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\Header.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GameEngine.h" />
     <ClInclude Include="src\ObjectPooler.h" />
     <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\Sound.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Skybox.h" />
     <ClInclude Include="src\Texture.h" />

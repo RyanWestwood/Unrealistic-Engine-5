@@ -1,4 +1,5 @@
 #include "GameEngine.h"
+#include "Font.h"
 
 namespace UE {
 
@@ -9,7 +10,7 @@ namespace UE {
 	GameEngine::GameEngine() = default;
 
 	GameEngine::~GameEngine() = default;
-
+	//TODO: link sdl_mixer on windows. 
 	bool GameEngine::Init(bool vsync)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -43,6 +44,11 @@ namespace UE {
 			std::cerr << "Warning: unable to set vsync! SDL Error: " << SDL_GetError() << "\n";
 			return false;
 		}
+
+		//if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+		//	std::cout << "SDL_Mix could not init! SDL_Mix error: " << Mix_GetError() << "\n";
+		//	return false;
+		//}
 
 		SDL_ShowCursor(SDL_DISABLE);
 

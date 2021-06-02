@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 //#include "ObjectPooler.h"
+#include "Sound.h"
 
 using namespace UE;
 constexpr int c_Delta = 1000 / 60;
@@ -23,6 +24,15 @@ int main(int argv, char* argc[]) {
 	uint32_t last_time = SDL_GetTicks();
 	uint32_t current_time = 0;
 	uint16_t frame_count = 0;
+
+	Sound test = Sound();
+	test.LoadSound("sfx.wav");
+	test.PlaySound();
+
+	Music hi = Music();
+	hi.LoadMusic("music.wav");
+	hi.PlayMusic();
+
 
 	while (gameEngine.IsRunning()) {
 		if (!gameEngine.IsPaused()) {

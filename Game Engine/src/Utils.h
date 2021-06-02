@@ -14,4 +14,5 @@ namespace UE {
 	const std::string g_ModelDirectory = "./resources/models/";
 	const std::string g_TextureDirectory = "./resources/textures/";
 	const std::string g_SkyboxDirectory = "./resources/skybox/";
+	const std::string g_SoundDirectory = "./resources/sound/";
 }

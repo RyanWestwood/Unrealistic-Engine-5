@@ -9,5 +9,7 @@ out vec4 fragmentColour;
 void main()
 {
 	vec4 texColour = texture(sampler, uv);
+	if(texColour.a < 0.1)
+		discard;
 	fragmentColour = texColour;
 }
