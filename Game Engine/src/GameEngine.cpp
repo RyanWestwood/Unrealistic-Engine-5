@@ -1,5 +1,4 @@
 #include "GameEngine.h"
-#include "Font.h"
 
 namespace UE {
 
@@ -82,8 +81,6 @@ namespace UE {
 		m_Camera->SetOldMouseX(SCREEN_WIDTH / 2);
 		m_Camera->SetOldMouseY(SCREEN_HEIGHT / 2);
 
-
-
 		//=== SYSTEM INTERGRATION ===
 
 
@@ -109,10 +106,27 @@ namespace UE {
 		m_Models.back()->SetPosition({ 2.0F, 0.0F, -3.0F });
 		m_Models.back()->SetScale({ 1.0F, 1.0F, 1.0F });
 
-		m_Billboard = std::make_shared<Billboard>("tree.png", m_Camera);
-		m_Billboard->Init();
-		m_Billboard->SetScale({ 5.0F, 5.0F, 0.0F });
-		m_Billboard->SetPosition({ 7.0F,0.0F, -7.0F });
+		// m_Billboard = std::make_shared<Billboard>("tree.png", m_Camera);
+		// m_Billboard->Init();
+		// m_Billboard->SetScale({ 5.0F, 5.0F, 0.0F });
+		// m_Billboard->SetPosition({ 7.0F,0.0F, -7.0F });
+
+		for (unsigned short i = 1; i < 6; i++)
+		{
+			m_Billboard.emplace_back(std::make_shared<Billboard>("tree.png", m_Camera));
+			m_Billboard[i - 1]->Init();
+			m_Billboard[i - 1]->SetScale({ 5.0F, 5.0F, 0.0F });
+		}	
+		m_Billboard[0]->SetPosition({ -7.F, 0.0F, -7.0F });
+		m_Billboard[1]->SetPosition({ 0.F, 0.0F, -7.0F });
+		m_Billboard[2]->SetPosition({ -10.F, 0.0F, -3.0F });
+		m_Billboard[3]->SetPosition({ 3.F, 0.0F, 2.0F });
+		m_Billboard[4]->SetPosition({ 6.F, 0.0F, 7.0F });
+
+		m_FontX = std::make_unique<Font>(10,10, SCREEN_WIDTH, SCREEN_HEIGHT, "X: 0");
+		m_FontY = std::make_unique<Font>(10,40, SCREEN_WIDTH, SCREEN_HEIGHT, "Y: 0");
+		m_FontZ = std::make_unique<Font>(10,70, SCREEN_WIDTH, SCREEN_HEIGHT, "Z: 0");
+		m_FontFPS = std::make_unique<Font>(10, 540, SCREEN_WIDTH, SCREEN_HEIGHT, "FPS: 0");
 
 		m_Skybox = std::make_unique<Skybox>("front.png", "back.png",
 			"left.png", "right.png",
@@ -129,7 +143,6 @@ namespace UE {
 		if (SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_QUIT, SDL_QUIT)) {
 			return false;
 		}
-		//TODO: Debugging close?
 		if (m_KeyDown[SDL_SCANCODE_X] == true) {
 			return false;
 		}
@@ -148,9 +161,7 @@ namespace UE {
 
 	void GameEngine::Input()
 	{
-		const float c_CameraSpeed = 0.1F;
 		const float c_MouseSensitivity = 0.1F;
-
 		int mouseX = 0, mouseY = 0;
 		SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -179,20 +190,6 @@ namespace UE {
 				}
 			}
 		}
-
-		if (m_KeyDown[SDL_SCANCODE_W] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() + m_Camera->GetTarget() * c_CameraSpeed);
-		}
-		if (m_KeyDown[SDL_SCANCODE_S] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() - m_Camera->GetTarget() * c_CameraSpeed);
-		}
-		if (m_KeyDown[SDL_SCANCODE_A] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() - glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
-		}
-		if (m_KeyDown[SDL_SCANCODE_D] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() + glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
-		}
-
 		m_Camera->UpdateCameraMatrices();
 		m_Camera->SetOldMouseX(SCREEN_WIDTH / 2);
 		m_Camera->SetOldMouseY(SCREEN_HEIGHT / 2);
@@ -202,7 +199,40 @@ namespace UE {
 
 	void GameEngine::Update()
 	{
+		const float c_CameraSpeed = 0.1F;
+		auto a = m_Camera->GetPosition();
+		if (m_KeyDown[SDL_SCANCODE_W] == true) {
+			m_Camera->SetPosition(m_Camera->GetPosition() + m_Camera->GetTarget() * c_CameraSpeed);
+			auto a = m_Camera->GetPosition();
+			m_Camera->SetPosition({a.x, 1, a.z});
+		}
+		if (m_KeyDown[SDL_SCANCODE_S] == true) {
+			m_Camera->SetPosition(m_Camera->GetPosition() - m_Camera->GetTarget() * c_CameraSpeed);
+			auto a = m_Camera->GetPosition();
+			m_Camera->SetPosition({a.x, 1, a.z});
+		}
+		if (m_KeyDown[SDL_SCANCODE_A] == true) {
+			m_Camera->SetPosition(m_Camera->GetPosition() - glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
+			auto a = m_Camera->GetPosition();
+			m_Camera->SetPosition({a.x, 1, a.z});
+		}
+		if (m_KeyDown[SDL_SCANCODE_D] == true) {
+			m_Camera->SetPosition(m_Camera->GetPosition() + glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
+			auto a = m_Camera->GetPosition();
+			m_Camera->SetPosition({a.x, 1, a.z});
+		}
 
+		std::stringstream x;
+		x << "X: " << std::fixed << std::setprecision(2) << a.x;
+		std::stringstream y;
+		y << "Y: " << std::fixed << std::setprecision(2) << a.y;
+		std::stringstream z;
+		z << "Z: " << std::fixed << std::setprecision(2) << a.z;
+
+		m_FontX->m_Text->setText(x.str());
+		m_FontY->m_Text->setText(y.str());
+		m_FontZ->m_Text->setText(z.str());
+		m_Camera->UpdateCameraMatrices();
 	}
 
 	void GameEngine::Draw()
@@ -214,7 +244,13 @@ namespace UE {
 		m_Skybox->Draw(m_Camera);
 		for (std::unique_ptr<Model>& model : m_Models)
 			model->Draw(m_Camera);
-		m_Billboard->Draw();
+		for(auto& billboard : m_Billboard){
+			billboard->Draw();
+		}
+		m_FontX->Draw();
+		m_FontY->Draw();
+		m_FontZ->Draw();
+		m_FontFPS->Draw();
 
 		SDL_GL_SwapWindow(m_Window);
 	}
@@ -229,6 +265,13 @@ namespace UE {
 	void GameEngine::SetWindowTitle(const char* title)
 	{
 		SDL_SetWindowTitle(m_Window, title);
+	}
+
+	void GameEngine::SetFps(const int fps)
+	{
+		std::stringstream x;
+		x << "FPS: " << std::fixed << std::setprecision(5) << fps;
+		m_FontFPS->m_Text->setText(x.str());
 	}
 
 	void DisplayInfoMessages(const char* msg)
