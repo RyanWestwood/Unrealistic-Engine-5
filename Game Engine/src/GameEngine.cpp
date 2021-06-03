@@ -161,7 +161,7 @@ namespace UE {
 
 	void GameEngine::Input()
 	{
-		const float c_MouseSensitivity = 0.1F;
+		const float c_MouseSensitivity = 0.01F;
 		int mouseX = 0, mouseY = 0;
 		SDL_GetMouseState(&mouseX, &mouseY);
 
