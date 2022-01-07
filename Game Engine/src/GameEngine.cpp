@@ -12,6 +12,11 @@ namespace UE {
 	//TODO: link sdl_mixer on windows. 
 	bool GameEngine::Init(bool vsync)
 	{
+
+		if (TTF_Init() < 0) {
+			std::cout << "SDL_TTF could not init! SDL_TTF error: " << TTF_GetError() << "\n";
+		}
+
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 			std::cerr << "Unable to init SDL sub-systems! SDL Error: " << SDL_GetError() << "\n";
 			return false;
@@ -106,15 +111,9 @@ namespace UE {
 		m_Models.back()->SetPosition({ 2.0F, 0.0F, -3.0F });
 		m_Models.back()->SetScale({ 1.0F, 1.0F, 1.0F });
 
-		// m_Billboard = std::make_shared<Billboard>("tree.png", m_Camera);
-		// m_Billboard->Init();
-		// m_Billboard->SetScale({ 5.0F, 5.0F, 0.0F });
-		// m_Billboard->SetPosition({ 7.0F,0.0F, -7.0F });
-
 		for (unsigned short i = 1; i < 6; i++)
 		{
 			m_Billboard.emplace_back(std::make_shared<Billboard>("tree.png", m_Camera));
-			m_Billboard[i - 1]->Init();
 			m_Billboard[i - 1]->SetScale({ 5.0F, 5.0F, 0.0F });
 		}	
 		m_Billboard[0]->SetPosition({ -7.F, 0.0F, -7.0F });
@@ -229,9 +228,9 @@ namespace UE {
 		std::stringstream z;
 		z << "Z: " << std::fixed << std::setprecision(2) << a.z;
 
-		m_FontX->m_Text->setText(x.str());
-		m_FontY->m_Text->setText(y.str());
-		m_FontZ->m_Text->setText(z.str());
+		m_FontX->SetText(x.str());
+		m_FontY->SetText(y.str());
+		m_FontZ->SetText(z.str());
 		m_Camera->UpdateCameraMatrices();
 	}
 
@@ -271,7 +270,7 @@ namespace UE {
 	{
 		std::stringstream x;
 		x << "FPS: " << std::fixed << std::setprecision(5) << fps;
-		m_FontFPS->m_Text->setText(x.str());
+		m_FontFPS->SetText(x.str());
 	}
 
 	void DisplayInfoMessages(const char* msg)

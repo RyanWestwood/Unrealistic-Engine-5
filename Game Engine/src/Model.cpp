@@ -6,28 +6,12 @@ namespace UE{
 	Model::Model(const char* modelPath, const char* texturePath)
 	{
 		m_Model = std::make_shared<Mesh>();
-		bool result = m_Model->LoadFromFile((g_ModelDirectory + std::string(modelPath)).c_str());
+		const bool result = m_Model->LoadFromFile((g_ModelDirectory + std::string(modelPath)).c_str());
 		if (!result) std::cerr << "Failed to load model!\n";
 
 		m_Texture = std::make_shared<Texture>((g_TextureDirectory + std::string(texturePath)).c_str());
 
 		m_ModelRenderer = std::make_unique<MeshRenderer>(m_Model);
-		m_ModelRenderer->Init();
-		m_ModelRenderer->SetRotation({ 0.0F, 0.0F, 0.0F });
-		m_ModelRenderer->SetScale({ 3,3,3 });
-		m_ModelRenderer->SetMaterial(m_Texture);
-	}
-
-	void Model::Init(const char* modelPath, const char* texturePath)
-	{
-		m_Model = std::make_shared<Mesh>();
-		bool result = m_Model->LoadFromFile((g_ModelDirectory + std::string(modelPath)).c_str());
-		if (!result) std::cerr << "Failed to load model!\n";
-
-		m_Texture = std::make_shared<Texture>((g_TextureDirectory + std::string(texturePath)).c_str());
-
-		m_ModelRenderer = std::make_unique<MeshRenderer>(m_Model);
-		m_ModelRenderer->Init();
 		m_ModelRenderer->SetRotation({ 0.0F, 0.0F, 0.0F });
 		m_ModelRenderer->SetScale({ 3,3,3 });
 		m_ModelRenderer->SetMaterial(m_Texture);
@@ -38,6 +22,12 @@ namespace UE{
 	}
 
 	//=====	MESH ======
+	Mesh::Mesh()
+	{
+		m_Vertices = {};
+		m_NumVertices = 0;
+	}
+
 	bool Mesh::LoadFromFile(const char* filename)
 	{
 		Assimp::Importer importer;
@@ -73,6 +63,13 @@ namespace UE{
 		m_Rotation = { 0.0F, 0.0F, 0.0F };
 		m_Scale = { 1.0F, 1.0F, 1.0F };
 		m_Mesh = std::move(model);
+		Init();
+	}
+
+	MeshRenderer::~MeshRenderer() 
+	{
+		glDeleteProgram(m_ProgramID);
+		glDeleteBuffers(1, &m_VboModel);
 	}
 
 	void MeshRenderer::Init()
@@ -110,14 +107,10 @@ namespace UE{
 		glGenBuffers(1, &m_VboModel);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VboModel);
 
-		glBufferData(GL_ARRAY_BUFFER, m_Mesh->GetNumVertices() * sizeof(Vertex), m_Mesh->GetVertices(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, m_Mesh->GetNumVertices() * sizeof(Vertex), m_Mesh->GetVertices().data(), GL_STATIC_DRAW);
 
 		glDeleteShader(v_id);
 		glDeleteShader(f_id);
-	}
-
-	void MeshRenderer::Update()
-	{
 	}
 
 	void MeshRenderer::Draw(const std::shared_ptr<Camera>& camera)
@@ -161,11 +154,4 @@ namespace UE{
 
 		glDisable(GL_CULL_FACE);
 	}
-
-	void MeshRenderer::Free()
-	{
-		glDeleteProgram(m_ProgramID);
-		glDeleteBuffers(1, &m_VboModel);
-	}
-
 }// namespace UE

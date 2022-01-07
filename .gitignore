@@ -1,3 +1,5 @@
-# Visual Studio 2015/2017 cache/options directory
-*.vs
-*.ipch
+Game Engine/.vs/*
+Game Engine/bin/*
+Game Engine/bin/intermediates/*
+Game Engine/bin/intermediates/x64/*
+Game Engine/bin/intermediates/x64/Release/*

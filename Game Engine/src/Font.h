@@ -3,23 +3,25 @@
 #include <memory>
 
 namespace UE{
-
     class Font{
-        public:
-            Font(const int x, const int y, const int width, const int height, const std::string& msg){
-                m_Text = std::make_shared<GUIText>(x,y, msg, "font.ttf");
-                m_TextRenderer = std::make_shared<GUIRenderer>();
-                m_TextRenderer->init(width, height);
-            }
+    public:
+		Font(const int x, const int y, const int width, const int height, const std::string& msg);
 
-            ~Font(){   }
+		void SetRenderTexture(std::string text, std::string fontname, int size);
+		void SetText(const std::string& msg);
+		
+		void SetX(int newX) { m_XPos = newX; }
+		void SetY(int newY) { m_YPos = newY; }
 
-            void Draw(){ m_TextRenderer->drawText(m_Text.get()); }
+		int GetX() { return m_XPos; }
+		int GetY() { return m_YPos; }
 
+		void Draw();
 
-        public:
-
-        std::shared_ptr<GUIText> m_Text;
+    public:
 		std::shared_ptr<GUIRenderer> m_TextRenderer;
+		std::shared_ptr<Texture> m_Texture;
+		std::string m_Font;
+		int m_XPos, m_YPos;
     };
 }

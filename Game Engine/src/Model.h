@@ -18,15 +18,11 @@
 namespace UE {
 	class Mesh {
 	public:
-		Mesh() {
-			m_Vertices = {};
-			m_NumVertices = 0;
-		}
-		~Mesh() {}
+		Mesh();
 
 		bool LoadFromFile(const char* filename);
 
-		void* GetVertices() { return m_Vertices.data(); }
+		std::vector<Vertex>& GetVertices() { return m_Vertices; }
 		const int& GetNumVertices() { return m_NumVertices; }
 
 	private:
@@ -37,14 +33,10 @@ namespace UE {
 	class MeshRenderer {
 	public:
 		MeshRenderer(std::shared_ptr<Mesh> model);
-		~MeshRenderer() = default;
+		~MeshRenderer();
 
 		void Init();
-
-		void Update();
 		void Draw(const std::shared_ptr<Camera>& camera);
-
-		void Free();
 
 		glm::vec3 GetPosition() { return m_Position; }
 		glm::vec3 GetRotation() { return m_Rotation; }
@@ -76,11 +68,7 @@ namespace UE {
 
 	class Model {
 	public:
-		Model() {}
-		//	TODO: Remove hthis constructor?
 		Model(const char* modelPath, const char* texturePath);
-
-		void Init(const char* modelPath, const char* texturePath);
 
 		void Draw(const std::shared_ptr<Camera>& camera);
 
@@ -88,7 +76,7 @@ namespace UE {
 		void SetRotation(glm::vec3 rotation) { m_ModelRenderer->SetRotation(rotation); }
 		void SetScale(glm::vec3 scale) { m_ModelRenderer->SetScale(scale); }
 
-		// private:
+	private:
 		std::shared_ptr<Mesh> m_Model;
 		std::unique_ptr<MeshRenderer> m_ModelRenderer;
 		std::shared_ptr<Texture> m_Texture;

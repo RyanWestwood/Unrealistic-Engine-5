@@ -41,8 +41,6 @@ namespace UE {
 		return shader_source;
 	}
 
-	// bool CompileProgram(const GLuint& v_id, const GLchar* v_shader_sourcecode[], const GLuint& f_id, const GLchar* f_shader_sourcecode[], GLuint& programId) {
-
 	bool CompileProgram(const GLuint& v_id, std::vector<const GLchar*>& v_shader_sourcecode, const GLuint& f_id, std::vector<const GLchar*>& f_shader_sourcecode, GLuint& programId) {
 		glShaderSource(v_id, 1, v_shader_sourcecode.data(), nullptr);
 		glCompileShader(v_id);

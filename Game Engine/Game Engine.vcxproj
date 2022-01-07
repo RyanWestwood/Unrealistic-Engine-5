@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -160,12 +160,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Billboard.cpp" />
-    <ClCompile Include="src\FontRenderer.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\GameEngine.cpp" />
     <ClCompile Include="src\GUIRenderer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Model.cpp" />
-    <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\Skybox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -174,15 +174,12 @@
     <ClInclude Include="src\Billboard.h" />
     <ClInclude Include="src\CrossPlatform.h" />
     <ClInclude Include="src\Font.h" />
-    <ClInclude Include="src\FontRenderer.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\GUIRenderer.h" />
     <ClInclude Include="src\Header.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GameEngine.h" />
-    <ClInclude Include="src\ObjectPooler.h" />
-    <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Sound.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\Skybox.h" />

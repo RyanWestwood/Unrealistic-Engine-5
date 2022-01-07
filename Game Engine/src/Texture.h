@@ -6,26 +6,10 @@
 namespace UE {
 	class Texture {
 	public:
-		Texture(std::string filename) {
-			m_Width = m_Height = 0;
-			m_TextureName = 0;
-			LoadTexture(filename);
-		}
+		Texture(std::string filename);
+		Texture(GLuint name);
 
-		Texture(GLuint name){
-			m_TextureName = name;
-
-			glBindTexture(GL_TEXTURE_2D, m_TextureName);			
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &m_Width);
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &m_Height);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			m_Format = GL_RGBA;
-		}
-
-		~Texture() {
-			glDeleteTextures(1, &m_TextureName);
-		}
+		~Texture() { glDeleteTextures(1, &m_TextureName); }
 
 		int GetWidth() { return m_Width; }
 		int GetHeight() { return m_Height; }
