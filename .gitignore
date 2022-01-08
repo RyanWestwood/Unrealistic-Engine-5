@@ -1,5 +1,6 @@
-Game Engine/.vs/*
-Game Engine/bin/*
-Game Engine/bin/intermediates/*
-Game Engine/bin/intermediates/x64/*
-Game Engine/bin/intermediates/x64/Release/*
+GameEngine/.vs/*
+GameEngine/bin/*
+GameEngine/.vscode/*
+GameEngine/linux/*
+**/x86
+**/win32
