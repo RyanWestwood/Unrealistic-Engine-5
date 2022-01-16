@@ -12,7 +12,7 @@ int main(int argv, char* argc[]) {
 
 	GameEngine gameEngine;
 
-	if (!gameEngine.Init(false)) {
+	if (!gameEngine.InitialiseSubsystems(true)) {
 		DisplayInfoMessages("Couldn't load SDL! Check console output for more details.");
 	}
 

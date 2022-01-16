@@ -3,10 +3,9 @@
 
 namespace UE{
 
-    struct Transform{
+    struct TransformComponent{
         glm::vec3 position;
         glm::vec3 scale;
         glm::quat rotation;
     };
-
 }

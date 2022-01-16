@@ -1,12 +1,12 @@
 #include "GUIRenderer.h"
-#include "Utils.h"
-#include "Vertex.h"
-#include "CrossPlatform.h"
 #include <array>
-#include <glm/glm.hpp>
 #include <iostream>
 #include <glm/ext/matrix_clip_space.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "CrossPlatform.h"
+#include "Utils.h"
+#include "Vertex.h"
 #include <GL/glew.h>
 
 namespace UE {
@@ -94,5 +94,10 @@ namespace UE {
 
 		glEnable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);
+	}
+
+	void GUIRenderer::DrawTexture(glm::vec2 position, std::shared_ptr<Texture> texture)
+	{
+		DrawTexture(position.x, position.y, texture);
 	}
 }

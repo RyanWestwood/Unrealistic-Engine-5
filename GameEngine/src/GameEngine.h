@@ -12,10 +12,17 @@
 #include "Billboard.h"
 #include "CrossPlatform.h"
 
+#include "ECS/ECS.h"
+#include "ECS/systems/PhysicsSystem.h"
+#include "ECS/systems/RendererSystem.h"
+#include "ECS/components/SpriteComponent.h"
+#include "ECS/components/TransformComponent.h"
+
 namespace UE {
+
 	class GameEngine {
 	public:
-		bool Init(bool);
+		bool InitialiseSubsystems(bool);
 		bool IsRunning();
 		bool IsPaused();
 		void Resume();
@@ -29,6 +36,8 @@ namespace UE {
 		void SetWindowTitle(const char* title);
 
 	private:
+		void SceneSetup();
+
 		SDL_Window* m_Window;
 		SDL_GLContext m_Context;
 
@@ -44,6 +53,9 @@ namespace UE {
 		std::unique_ptr<Font> m_FontZ;
 
 		glm::vec3 dist;
+
+		std::shared_ptr<PhysicsSystem> m_PhysicsSystem;
+		std::shared_ptr<RendererSystem> m_RenderSystem;
 	};
 
 	void DisplayInfoMessages(const char* msg);

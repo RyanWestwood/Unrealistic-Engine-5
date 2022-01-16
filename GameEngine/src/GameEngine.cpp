@@ -6,12 +6,10 @@ namespace UE {
 	constexpr int SCREEN_HEIGHT = 576;
 	constexpr float ASPECT_RATIO = static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT;
 
-	bool GameEngine::Init(bool vsync)
-	{
-		if (TTF_Init() < 0) {
-			std::cout << "SDL_TTF could not init! SDL_TTF error: " << TTF_GetError() << "\n";
-		}
+	Coordinator g_Coordinator;
 
+	bool GameEngine::InitialiseSubsystems(bool vsync)
+	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 			std::cerr << "Unable to init SDL sub-systems! SDL Error: " << SDL_GetError() << "\n";
 			return false;
@@ -21,7 +19,12 @@ namespace UE {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-		m_Window = SDL_CreateWindow("Unrealistic Engine 5", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		m_Window = SDL_CreateWindow("Unrealistic Engine 5",
+			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+			SCREEN_WIDTH, SCREEN_HEIGHT,
+			SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
+		);
+
 		if (m_Window == nullptr) {
 			std::cerr << "Unable to create window! SDL Error: " << SDL_GetError() << "\n";
 			return false;
@@ -35,7 +38,7 @@ namespace UE {
 
 		GLenum status = glewInit();
 		if (status != GLEW_OK) {
-			std::cerr << "Unable to init glew! SDL Error: " << glewGetErrorString(status) << "\n";
+			std::cerr << "Unable to init GLEW! SDL Error: " << glewGetErrorString(status) << "\n";
 			return false;
 		}
 
@@ -44,7 +47,47 @@ namespace UE {
 			return false;
 		}
 
+		if (TTF_Init() < 0) {
+			std::cout << "SDL_TTF could not init! SDL_TTF error: " << TTF_GetError() << "\n";
+		}
+
 		SDL_ShowCursor(SDL_DISABLE);
+
+		//	ECS System
+		g_Coordinator.Init();
+		g_Coordinator.RegisterComponent<TransformComponent>();
+		g_Coordinator.RegisterComponent<SpriteComponent>();
+
+		m_PhysicsSystem = g_Coordinator.RegisterSystem<PhysicsSystem>();
+		m_PhysicsSystem->SetSystem();
+
+		m_RenderSystem = g_Coordinator.RegisterSystem<RendererSystem>();
+		m_RenderSystem->SetSystem();
+
+		// TODO: Abstract to scene levels?
+		SceneSetup();
+
+		return true;
+	}
+
+	void GameEngine::SceneSetup()
+	{
+		//	ECS TEST
+		std::vector<std::uint32_t> entities(1);
+		for (auto& entity : entities)
+		{
+			entity = g_Coordinator.CreateEntity();
+			g_Coordinator.AddComponent(entity, TransformComponent{
+				.position = glm::vec3(1),
+				.scale = glm::vec3(1),
+				.rotation = glm::quat()
+				});
+			g_Coordinator.AddComponent(entity, SpriteComponent{
+				.renderer = std::make_shared<GUIRenderer>(SCREEN_WIDTH, SCREEN_HEIGHT),
+				.sprite = std::make_shared<Texture>((g_TextureDirectory + std::string("tree.png")).c_str())
+				});
+		}
+		//	===========================
 
 		m_Camera = std::make_shared<Camera>(
 			glm::vec3(0.0f, 1.0f, 5.0f),
@@ -115,8 +158,6 @@ namespace UE {
 			"top.png", "bottom.png");
 
 		m_IsRunning = false;
-
-		return true;
 	}
 
 	bool GameEngine::IsRunning()
@@ -146,6 +187,7 @@ namespace UE {
 			if (e.type == SDL_KEYDOWN) {
 				if (e.key.keysym.sym == SDLK_ESCAPE) {
 					m_IsRunning = !m_IsRunning;
+					m_KeyDown[SDLK_ESCAPE] = false;
 					SDL_ShowCursor(m_IsRunning);
 				}
 			}
@@ -194,37 +236,43 @@ namespace UE {
 		SDL_WarpMouseInWindow(m_Window, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	}
 
+	// #TODO: might look jank because not using delta time for updates?
+	// find a way to add both movements together?
 	void GameEngine::Update()
 	{
 		const float c_CameraSpeed = 0.1F;
-		auto a = m_Camera->GetPosition();
+		const auto cameraUp = m_Camera->GetUpDirection();
+		const auto cameraTarget = m_Camera->GetTarget();
+		auto cameraPosition = m_Camera->GetPosition();
+		auto movement = cameraPosition;
+
 		if (m_KeyDown[SDL_SCANCODE_W] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() + m_Camera->GetTarget() * c_CameraSpeed);
-			auto a = m_Camera->GetPosition();
-			m_Camera->SetPosition({ a.x, 1, a.z });
+			movement = cameraPosition + cameraTarget * c_CameraSpeed;
 		}
 		if (m_KeyDown[SDL_SCANCODE_S] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() - m_Camera->GetTarget() * c_CameraSpeed);
-			auto a = m_Camera->GetPosition();
-			m_Camera->SetPosition({ a.x, 1, a.z });
+			movement = cameraPosition - cameraTarget * c_CameraSpeed;
 		}
+		movement.y = 1;
+		m_Camera->SetPosition(movement);
+		cameraPosition = m_Camera->GetPosition();
+
 		if (m_KeyDown[SDL_SCANCODE_A] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() - glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
-			auto a = m_Camera->GetPosition();
-			m_Camera->SetPosition({ a.x, 1, a.z });
+			movement = cameraPosition - glm::normalize(glm::cross(cameraTarget, cameraUp)) * c_CameraSpeed;
 		}
 		if (m_KeyDown[SDL_SCANCODE_D] == true) {
-			m_Camera->SetPosition(m_Camera->GetPosition() + glm::normalize(glm::cross(m_Camera->GetTarget(), m_Camera->GetUpDirection())) * c_CameraSpeed);
-			auto a = m_Camera->GetPosition();
-			m_Camera->SetPosition({ a.x, 1, a.z });
+			movement = cameraPosition + glm::normalize(glm::cross(cameraTarget, cameraUp)) * c_CameraSpeed;
 		}
+		movement.y = 1;
+		m_Camera->SetPosition(movement);
+
+		m_PhysicsSystem->Update();
 
 		std::stringstream x;
-		x << "X: " << std::fixed << std::setprecision(2) << a.x;
+		x << "X: " << std::fixed << std::setprecision(2) << cameraPosition.x;
 		std::stringstream y;
-		y << "Y: " << std::fixed << std::setprecision(2) << a.y;
+		y << "Y: " << std::fixed << std::setprecision(2) << cameraPosition.y;
 		std::stringstream z;
-		z << "Z: " << std::fixed << std::setprecision(2) << a.z;
+		z << "Z: " << std::fixed << std::setprecision(2) << cameraPosition.z;
 
 		m_FontX->SetText(x.str());
 		m_FontY->SetText(y.str());
@@ -239,11 +287,14 @@ namespace UE {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		m_Skybox->Draw(m_Camera);
-		for (std::unique_ptr<Model>& model : m_Models)
+		
+		for (auto& model : m_Models)
 			model->Draw(m_Camera);
-		for (auto& billboard : m_Billboard) {
+		for (auto& billboard : m_Billboard)
 			billboard->Draw();
-		}
+
+		m_RenderSystem->Draw();
+
 		m_FontX->Draw();
 		m_FontY->Draw();
 		m_FontZ->Draw();

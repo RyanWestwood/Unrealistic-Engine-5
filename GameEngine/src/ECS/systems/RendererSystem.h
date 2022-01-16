@@ -1,35 +1,29 @@
 #pragma once
-#include <memory>
+#include "ECS/ECS.h"
+#include "ECS/components/SpriteComponent.h"
 
-#include "Camera.h"
+ namespace UE{
 
-#include "ECS.h"
-#include "./ECS/components/ModelComponent.h"
+     extern Coordinator g_Coordinator;
 
-// namespace UE{
+     class RendererSystem : public System{
+         public:
+			 
+			 void SetSystem()
+			 {
+				 std::bitset<MAX_COMPONENTS> signature;
+				 signature.set(g_Coordinator.GetComponentType<TransformComponent>());
+				 signature.set(g_Coordinator.GetComponentType<SpriteComponent>());
+				 g_Coordinator.SetSystemSignature<RendererSystem>(signature);
+			 }
 
-//     extern Coordinator g_Coordinator;
+			 void Draw() {
+				 for (auto const& entity : mEntities) {
+					 auto transformComponent = g_Coordinator.GetComponent<TransformComponent>(entity);
+					 auto& spriteComponent = g_Coordinator.GetComponent<SpriteComponent>(entity);
+					 spriteComponent.renderer->DrawTexture(transformComponent.position, spriteComponent.sprite);
+				 }
+			 }
+     };
 
-//     class RendererSystem : public System{
-//         public:
-//             void Init(std::shared_ptr<Camera> camera){
-//                 m_Camera = camera;
-//                 Signature signature;
-//                 signature.set(g_Coordinator.GetComponentType<ModelComponent>());
-//                 g_Coordinator.SetSystemSignature<RendererSystem>(signature);
-
-//             }
-
-//             void Draw(){
-//                 for(auto const& entity : mEntities){
-//                     auto& model = g_Coordinator.GetComponent<ModelComponent>(entity);
-
-//                     model.model.Draw(m_Camera);                    
-//                 }
-//             }
-
-//         private:
-//             std::shared_ptr<Camera> m_Camera;
-//     };
-
-// } // namespace UE
+ } // namespace UE

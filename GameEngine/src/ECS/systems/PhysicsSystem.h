@@ -1,31 +1,28 @@
 #pragma once
-#include "ECS.h"
+#include "ECS/ECS.h"
+#include "ECS/components/TransformComponent.h"
 
-// namespace UE{
+ namespace UE{
 
-//     extern Coordinator g_Coordinator;
+     extern Coordinator g_Coordinator;
 
-//     class PhysicsSystem : public System{
-//         public:
-//             void Init(){
-//                 Signature signature;
-//                 signature.set(g_Coordinator.GetComponentType<Gravity>());
-//                 signature.set(g_Coordinator.GetComponentType<RigidBody>());
-//                 signature.set(g_Coordinator.GetComponentType<Transform>());
-//                 g_Coordinator.SetSystemSignature<PhysicsSystem>(signature);
+     // #TODO Add rigidy body and shiz
+     class PhysicsSystem : public System{
+         public:
+            
+             void SetSystem()
+             {
+				 std::bitset<MAX_COMPONENTS> signature;
+                 signature.set(g_Coordinator.GetComponentType<TransformComponent>());
+				 g_Coordinator.SetSystemSignature<PhysicsSystem>(signature);
+             }
 
-//             }
+             void Update(){
+                 for(auto const& entity : mEntities){
+                     auto& transformComponent = g_Coordinator.GetComponent<TransformComponent>(entity);
+                     transformComponent.position += glm::vec3(1);
+                 }
+             }
+     };
 
-//             void Update(){
-//                 for(auto const& entity : mEntities){
-//                     auto& rigidBody = g_Coordinator.GetComponent<RigidBody>(entity);
-//                     auto& transform = g_Coordinator.GetComponent<Transform>(entity);
-//                     auto const& gravity = g_Coordinator.GetComponent<Gravity>(entity);
-
-//                     transform.position += rigidBody.velocity;
-//                     rigidBody.velocity += gravity.force;
-//                 }
-//             }
-//     };
-
-// } // namespace UE
+ } // namespace UE

@@ -63,6 +63,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -86,6 +87,7 @@ xcopy $(SolutionDir)lib\SDL2-2.0.14\lib\$(Platform)\*.dll $(SolutionDir)bin\$(Pl
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,6 +120,11 @@ xcopy $(SolutionDir)lib\SDL2-2.0.14\lib\$(Platform)\*.dll $(SolutionDir)bin\$(Pl
   <ItemGroup>
     <ClInclude Include="src\Billboard.h" />
     <ClInclude Include="src\CrossPlatform.h" />
+    <ClInclude Include="src\ECS\components\SpriteComponent.h" />
+    <ClInclude Include="src\ECS\components\TransformComponent.h" />
+    <ClInclude Include="src\ECS\ECS.h" />
+    <ClInclude Include="src\ECS\systems\PhysicsSystem.h" />
+    <ClInclude Include="src\ECS\systems\RendererSystem.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\GUIRenderer.h" />

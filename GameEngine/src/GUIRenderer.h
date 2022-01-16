@@ -20,7 +20,8 @@ namespace UE {
 	{
 	public:
 		GUIRenderer(int window_width, int window_height);
-		void DrawTexture(int x, int y, std::shared_ptr<Texture> tex);
+		void DrawTexture(int x, int y, std::shared_ptr<Texture> texure);
+		void DrawTexture(glm::vec2 position, std::shared_ptr<Texture> tex);
 
 	private:
 		GUIRenderData m_RenderData;
